@@ -1,0 +1,144 @@
+<!-- =====================================================================
+  MyTX15 - Page 1 for pulidoevents.com/mytx15  (v5)
+  Paste into: GoDaddy Website Builder -> Welcome page -> Custom Code block.
+
+  v5: the map is now our own Leaflet map on GitHub Pages, replacing Datawrapper.
+    -> https://infobp.github.io/MyTX15Map/   (repo: github.com/InfoBP/MyTX15Map)
+    -> Geometry is District 15 from the Texas Legislative Council's enacted
+       PLANC2333 plan.
+    -> THE URL IS STABLE. Datawrapper pinned a version in the embed (/1/, /2/,
+       /3/) so every republish silently left this page showing the old map and
+       both src values had to be edited by hand. Pushing to the MyTX15Map repo
+       now updates the live map with NO change here, ever.
+    -> The Datawrapper postMessage height listener is gone. Height is set by
+       the .p1-map-frame CSS rules below, one breakpoint each.
+    -> NO loading="lazy" on the map iframes, deliberately. Deferred frames
+       rendered as an empty grey box in testing; the map sits directly above
+       the only CTA, so every visitor scrolls past it anyway and there is
+       nothing real to save by deferring it.
+
+  Still true from v3/v4:
+  * GoDaddy strips display:* rules from <style> blocks - every layout-critical
+    style (flex rows, circle centering, language hiding) is INLINE, which their
+    sanitizer leaves alone. The <style> block only carries cosmetics.
+  * Full-bleed via the 100vw negative-margin technique so the light background
+    runs edge to edge on phones.
+  * One CTA only (below the map), per Marco.
+  * CTA links carry target="_top" - inside the builder preview (an iframe) the
+    app's frame-ancestors CSP blocked navigation and showed a blank stuck page.
+  * The Gist still upgrades the CTA destination and the campaign logo at
+    runtime. It must NOT touch the map URL - that is the whole point of the
+    map living at a stable GitHub Pages address.
+====================================================================== -->
+<div id="mytx15-p1" style="background:#E9E9E9;color:#00205B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.5;padding:0 0 34px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)">
+  <style>
+    #mytx15-p1 .p1-badge{font-size:11px;font-weight:700;color:#3B4A73;letter-spacing:.05em;text-transform:uppercase;padding:6px 12px;border-radius:6px;background:#EDEFF5;border:1px solid rgba(0,32,91,.12);white-space:nowrap}
+    #mytx15-p1 .p1-lang button{border:0;background:transparent;min-height:38px;padding:7px 13px;border-radius:8px;font-weight:600;font-size:13px;color:#5E6785;cursor:pointer}
+    #mytx15-p1 .p1-lang button.on{background:#fff;color:#00205B;box-shadow:0 1px 2px rgba(0,32,91,.08)}
+    #mytx15-p1 .p1-eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#AD0B32;text-align:center;margin:26px 0 8px}
+    #mytx15-p1 .p1-headline{font-family:Georgia,'Times New Roman',serif;font-size:clamp(28px,7vw,40px);font-weight:600;line-height:1.12;text-align:center;margin:0 0 12px;color:#00205B}
+    #mytx15-p1 .p1-sub{font-size:16px;color:#3B4A73;text-align:center;max-width:46ch;margin:0 auto 20px}
+    #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
+    #mytx15-p1 .p1-cta:active{opacity:.85}
+    #mytx15-p1 .p1-step{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;padding:14px 16px;text-align:left;margin-bottom:10px}
+    #mytx15-p1 .p1-step b{font-size:15px}
+    #mytx15-p1 .p1-step span{font-size:13.5px;color:#5E6785}
+    #mytx15-p1 .p1-map{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin-bottom:26px}
+    #mytx15-p1 .p1-map-cap{padding:14px 16px 8px;text-align:left}
+    #mytx15-p1 .p1-map-cap b{font-family:Georgia,serif;font-size:16px}
+    #mytx15-p1 .p1-map-cap span{font-size:13px;color:#5E6785}
+    /* The map page fills whatever height it is given, so these four rules
+       are the single place the map's height is decided. */
+    #mytx15-p1 .p1-map-frame{width:100%;height:620px;border:0;display:block;background:#F7F8F9}
+    @media(max-width:1024px){#mytx15-p1 .p1-map-frame{height:560px}}
+    @media(max-width:700px){#mytx15-p1 .p1-map-frame{height:500px}}
+    @media(max-width:420px){#mytx15-p1 .p1-map-frame{height:465px}}
+  </style>
+
+  <!-- Topbar: logo left, badge, EN/ES right - flex INLINE (sanitizer-proof) -->
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;max-width:640px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+      <img src="https://lphg5860uf.c36.airoapp.ai/assets/brand/bp-logo-small.png" alt="Bobby Pulido for Congress" style="height:30px;width:auto;display:block" class="p1-logo">
+      <span class="p1-badge">2026 Cycle</span>
+    </div>
+    <div class="p1-lang" style="display:flex;padding:3px;background:#EDEFF5;border-radius:10px">
+      <button type="button" class="on" data-setlang="en">English</button><button type="button" data-setlang="es">Espa&#241;ol</button>
+    </div>
+  </div>
+  <div style="height:3px;background:linear-gradient(to right,#00205B 0 33.33%,#FFFFFF 33.33% 66.66%,#AD0B32 66.66% 100%)"></div>
+
+  <!-- ENGLISH block (default visible) -->
+  <div data-lang-block="en" style="max-width:640px;margin:0 auto;padding:0 16px">
+    <p class="p1-eyebrow">Texas Congressional District 15</p>
+    <h2 class="p1-headline">Texas redrew its congressional map.<br>Find out where your home landed.</h2>
+    <p class="p1-sub">The Legislature adopted new district lines in 2025. The new TX-15 covers 11 counties &amp; 766,987 people. MyTX15 checks your home against the new boundary. Free, no account, about a minute.</p>
+    <div style="margin:0 0 22px">
+      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><div><b style="display:block">What you enter</b><span style="display:block;margin-top:1px">Five fields: name, date of birth &amp; address. Pick your address from the suggestion list; that puts your home on the map, not near it. Phone &amp; email are optional. They let us follow up if your registration needs a second look.</span></div></div>
+      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><div><b style="display:block">What we check</b><span style="display:block;margin-top:1px">Your address runs against the TX-15 boundary the Legislature adopted in 2025, then against the district's voter file. Both checks finish in seconds.</span></div></div>
+      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><div><b style="display:block">What you get</b><span style="display:block;margin-top:1px">A clear answer on the new district, your county &amp; voting precinct, and every official who represents your address across five levels: federal, state, county, city &amp; school board.</span></div></div>
+    </div>
+    <div class="p1-map">
+      <div class="p1-map-cap"><b style="display:block">The new TX-15</b><span style="display:block">11 counties: Aransas, Bee, Brooks, DeWitt, Goliad, Gonzales, Hidalgo, Jim Wells, Lavaca, Refugio &amp; San Patricio.</span></div>
+      <iframe class="p1-map-frame" title="Interactive map of the new Texas Congressional District 15" aria-label="Interactive map showing the 2026 Texas Congressional District 15" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+    <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en" style="display:block">Check my address &rarr;</a>
+  </div>
+
+  <!-- SPANISH block (hidden inline; toggled by the script) -->
+  <div data-lang-block="es" style="max-width:640px;margin:0 auto;padding:0 16px;display:none">
+    <p class="p1-eyebrow">Distrito Congresional 15 de Texas</p>
+    <h2 class="p1-headline">Texas redibuj&#243; su mapa congresional.<br>Vea d&#243;nde qued&#243; su hogar.</h2>
+    <p class="p1-sub">La Legislatura adopt&#243; nuevos l&#237;mites de distrito en 2025. El nuevo TX-15 abarca 11 condados y 766,987 habitantes. MyTX15 compara su hogar con el nuevo l&#237;mite. Gratis, sin cuenta, en un minuto.</p>
+    <div style="margin:0 0 22px">
+      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><div><b style="display:block">Lo que usted ingresa</b><span style="display:block;margin-top:1px">Cinco campos: nombre, fecha de nacimiento y domicilio. Elija su domicilio de la lista de sugerencias; as&#237; su hogar queda en el mapa, no cerca de &#233;l. El tel&#233;fono y el correo son opcionales. Nos permiten darle seguimiento si su registro necesita una segunda revisi&#243;n.</span></div></div>
+      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><div><b style="display:block">Lo que verificamos</b><span style="display:block;margin-top:1px">Su domicilio se compara con el l&#237;mite del TX-15 que la Legislatura adopt&#243; en 2025, y despu&#233;s con el archivo de votantes del distrito. Ambas verificaciones terminan en segundos.</span></div></div>
+      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><div><b style="display:block">Lo que usted recibe</b><span style="display:block;margin-top:1px">Una respuesta clara sobre el nuevo distrito, su condado y precinto electoral, y cada funcionario que representa su domicilio en cinco niveles: federal, estatal, condado, ciudad y junta escolar.</span></div></div>
+    </div>
+    <div class="p1-map">
+      <div class="p1-map-cap"><b style="display:block">El nuevo TX-15</b><span style="display:block">11 condados: Aransas, Bee, Brooks, DeWitt, Goliad, Gonzales, Hidalgo, Jim Wells, Lavaca, Refugio y San Patricio.</span></div>
+      <iframe class="p1-map-frame" title="Mapa interactivo del nuevo Distrito Congresional 15 de Texas" aria-label="Mapa interactivo que muestra el Distrito Congresional 15 de Texas para 2026" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+    <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es" style="display:block">Verificar mi domicilio &rarr;</a>
+  </div>
+
+  <script>
+  (function () {
+    var root = document.getElementById('mytx15-p1');
+    if (!root) return;
+    var GIST = 'https://gist.githubusercontent.com/InfoBP/c974c9cb7da44a3cb18b8d821723e883/raw/redirect-config.json';
+    var lang = (navigator.language || '').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+
+    function show(which) {
+      lang = which;
+      var blocks = root.querySelectorAll('[data-lang-block]');
+      for (var i = 0; i < blocks.length; i++) {
+        blocks[i].style.display = blocks[i].getAttribute('data-lang-block') === which ? '' : 'none';
+      }
+      var buttons = root.querySelectorAll('[data-setlang]');
+      for (var j = 0; j < buttons.length; j++) {
+        buttons[j].className = buttons[j].getAttribute('data-setlang') === which ? 'on' : '';
+      }
+    }
+    var langButtons = root.querySelectorAll('[data-setlang]');
+    for (var k = 0; k < langButtons.length; k++) {
+      (function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-setlang')); }); })(langButtons[k]);
+    }
+    show(lang);
+
+    // The Gist only upgrades things still served BY THE APP - the CTA links
+    // and the logo. The map is a Datawrapper URL now and is deliberately left
+    // alone here; changing the app URL must not touch it.
+    fetch(GIST, { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (cfg) {
+      if (!cfg || !cfg.target) return;
+      var base = String(cfg.target).replace(/\/$/, '');
+      var ctas = root.querySelectorAll('[data-cta]');
+      for (var i = 0; i < ctas.length; i++) {
+        var block = ctas[i].closest ? ctas[i].closest('[data-lang-block]') : null;
+        ctas[i].href = base + '/?lang=' + (block ? block.getAttribute('data-lang-block') : 'en');
+      }
+      var logo = root.querySelector('.p1-logo');
+      if (logo) logo.src = base + '/assets/brand/bp-logo-small.png';
+    }).catch(function () {});
+  })();
+  </script>
+</div>
