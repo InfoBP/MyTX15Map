@@ -70,6 +70,16 @@
       color:#87919A!important;font-size:8px!important}
     .leaflet-control-attribution a{color:#56718C!important}
 
+    /* Two-finger hint. Only ever shown in response to a one-finger drag, then
+       fades out; it never covers the map on load. */
+    #gesture-hint{position:absolute;inset:0;z-index:1000;display:flex;align-items:center;
+      justify-content:center;pointer-events:none;opacity:0;transition:opacity .18s ease;
+      background:rgba(21,35,48,.42)}
+    #gesture-hint.show{opacity:1}
+    #gesture-hint span{color:#fff;font-size:14px;font-weight:600;letter-spacing:-.01em;
+      padding:10px 18px;border-radius:999px;background:rgba(21,35,48,.55)}
+    @media(prefers-reduced-motion:reduce){#gesture-hint{transition:none}}
+
     @media(max-width:1024px){.city-name{font-size:8.8px}}
     @media(max-width:700px){.city-name{font-size:8.2px}}
     @media(max-width:420px){.city-name{font-size:7.8px}}
@@ -80,6 +90,7 @@
 <div id="map" role="img"
      aria-label="Map showing the 2026 Texas Congressional District 15 boundary and selected communities."></div>
 <div id="map-fallback" role="status">Map temporarily unavailable.</div>
+<div id="gesture-hint" aria-hidden="true"><span>Use two fingers to move the map</span></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"
@@ -93,10 +104,10 @@
   // district stroke — rather than desktop values crammed into a small frame.
   function getDeviceSettings() {
     var w = window.innerWidth;
-    if (w <= 420) return {type:"small-mobile",padding:[5,5], iconSize:9,  poiGap:2,   borderWeight:1.8, adjustmentScale:0.78};
-    if (w <= 700) return {type:"mobile",      padding:[6,6], iconSize:10, poiGap:2.1, borderWeight:2,   adjustmentScale:0.84};
-    if (w <=1024) return {type:"tablet",      padding:[7,7], iconSize:11, poiGap:2.3, borderWeight:2.2, adjustmentScale:0.92};
-    return               {type:"desktop",     padding:[8,8], iconSize:12, poiGap:2.5, borderWeight:2.35,adjustmentScale:1};
+    if (w <= 420) return {type:"small-mobile",padding:[5,5], iconSize:9,  poiGap:2,   borderWeight:1,   adjustmentScale:0.78};
+    if (w <= 700) return {type:"mobile",      padding:[6,6], iconSize:10, poiGap:2.1, borderWeight:1.1, adjustmentScale:0.84};
+    if (w <=1024) return {type:"tablet",      padding:[7,7], iconSize:11, poiGap:2.3, borderWeight:1.2, adjustmentScale:0.92};
+    return               {type:"desktop",     padding:[8,8], iconSize:12, poiGap:2.5, borderWeight:1.4, adjustmentScale:1};
   }
 
   var device = getDeviceSettings();
@@ -105,7 +116,8 @@
     // Canvas rendering: the district is a single 14k-vertex polygon, markedly
     // cheaper to draw as canvas than as SVG paths on low-end phones.
     preferCanvas: true,
-    zoomControl: device.type === "desktop" || device.type === "tablet",
+    // Always present, top-left. Small enough not to crowd a phone.
+    zoomControl: false,
     // Off so the page still scrolls normally when someone swipes over the
     // embedded frame on a phone.
     scrollWheelZoom: false,
@@ -158,19 +170,49 @@
   var tx15Layer = null;
   var cityMarkers = [];
 
-  // Zoom buttons on desktop and tablet only; on a phone they eat map area and
-  // pinch-to-zoom is the expected gesture anyway.
-  function wantsZoomControl() {
-    return device.type === "desktop" || device.type === "tablet";
-  }
-  function syncZoomControl() {
-    var present = !!map.zoomControl && !!map.zoomControl._map;
-    if (wantsZoomControl() && !present) {
-      map.zoomControl = L.control.zoom();
-      map.addControl(map.zoomControl);
-    } else if (!wantsZoomControl() && present) {
-      map.removeControl(map.zoomControl);
-    }
+  L.control.zoom({ position: "topleft" }).addTo(map);
+
+  // Two-finger panning on touch devices.
+  //
+  // This map is embedded mid-page, directly above the only call to action. With
+  // ordinary one-finger dragging the map swallows the scroll: a visitor swiping
+  // up to reach the CTA just pans the district instead and gets stuck on it.
+  // So one finger scrolls the PAGE, two fingers move the map, which is the
+  // convention people already know from Google Maps embeds.
+  //
+  // Leaflet has no built-in option for this, so dragging is toggled by finger
+  // count and a hint is surfaced the first time someone tries one finger.
+  var touchCapable = ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+  if (touchCapable) {
+    var hint = document.getElementById("gesture-hint");
+    var hintTimer = null;
+    var container = map.getContainer();
+
+    map.dragging.disable();
+
+    container.addEventListener("touchstart", function (e) {
+      if (e.touches.length >= 2) {
+        map.dragging.enable();
+        if (hint) hint.classList.remove("show");
+        clearTimeout(hintTimer);
+      } else {
+        map.dragging.disable();
+      }
+    }, { passive: true });
+
+    // A one-finger drag means they tried to pan. Say so, then get out of the
+    // way — the gesture itself still scrolls the page underneath.
+    container.addEventListener("touchmove", function (e) {
+      if (e.touches.length === 1 && hint) {
+        hint.classList.add("show");
+        clearTimeout(hintTimer);
+        hintTimer = setTimeout(function () { hint.classList.remove("show"); }, 1400);
+      }
+    }, { passive: true });
+
+    container.addEventListener("touchend", function () {
+      map.dragging.disable();
+    }, { passive: true });
   }
 
   function createCityIcon(city) {
@@ -209,12 +251,17 @@
       if (!data || !data.features || !data.features.length) throw new Error("GeoJSON contained no features");
 
       tx15Layer = L.geoJSON(data, {
+        // Hairline outline at low opacity, carrying a slightly stronger fill.
+        // A heavy 2.35px stroke at 96% fought the city labels wherever one
+        // crossed the border and made the whole thing read like a GIS export.
+        // The outline is kept rather than dropped: without it the coast turns
+        // to mush where the fill meets water, since both are pale blue.
         style: {
           color: "#00205B",
           weight: device.borderWeight,
-          opacity: 0.96,
+          opacity: 0.42,
           fillColor: "#4B83B7",
-          fillOpacity: 0.22
+          fillOpacity: 0.26
         }
       }).addTo(map);
 
@@ -267,11 +314,6 @@
           cityMarkers.forEach(function (item) {
             item.marker.setIcon(createCityIcon(item.city));
           });
-          // zoomControl is fixed when L.map() runs, so a tablet rotating across
-          // the 700px boundary would otherwise keep whichever state it loaded
-          // with — controls stuck on a phone-width map, or missing on a
-          // desktop-width one.
-          syncZoomControl();
         }, 150);
       });
     })
