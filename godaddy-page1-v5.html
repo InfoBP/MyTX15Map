@@ -32,20 +32,36 @@
 ====================================================================== -->
 <div id="mytx15-p1" style="background:#E9E9E9;color:#00205B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.5;padding:0 0 34px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)">
   <style>
+    @font-face{font-family:"Museo Slab";
+      src:url("https://lphg5860uf.c36.airoapp.ai/assets/fonts/MuseoSlab-500.woff2") format("woff2"),
+          url("https://lphg5860uf.c36.airoapp.ai/assets/fonts/MuseoSlab-500.woff") format("woff");
+      font-weight:400 700;font-style:normal;font-display:swap}
     #mytx15-p1 .p1-badge{font-size:11px;font-weight:700;color:#3B4A73;letter-spacing:.05em;text-transform:uppercase;padding:6px 12px;border-radius:6px;background:#EDEFF5;border:1px solid rgba(0,32,91,.12);white-space:nowrap}
     #mytx15-p1 .p1-lang button{border:0;background:transparent;min-height:38px;padding:7px 13px;border-radius:8px;font-weight:600;font-size:13px;color:#5E6785;cursor:pointer}
     #mytx15-p1 .p1-lang button.on{background:#fff;color:#00205B;box-shadow:0 1px 2px rgba(0,32,91,.08)}
     #mytx15-p1 .p1-eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#AD0B32;text-align:center;margin:26px 0 8px}
-    #mytx15-p1 .p1-headline{font-family:Georgia,'Times New Roman',serif;font-size:clamp(28px,7vw,40px);font-weight:600;line-height:1.12;text-align:center;margin:0 0 12px;color:#00205B}
+    #mytx15-p1 .p1-headline{font-family:"Museo Slab",Georgia,serif;font-size:clamp(28px,7vw,40px);font-weight:600;line-height:1.12;text-align:center;margin:0 0 12px;color:#00205B}
     #mytx15-p1 .p1-sub{font-size:16px;color:#3B4A73;text-align:center;max-width:46ch;margin:0 auto 20px}
     #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
     #mytx15-p1 .p1-cta:active{opacity:.85}
     #mytx15-p1 .p1-step{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;padding:14px 16px;text-align:left;margin-bottom:10px}
     #mytx15-p1 .p1-step b{font-size:15px}
     #mytx15-p1 .p1-step span{font-size:13.5px;color:#5E6785}
+    /* Steps collapse. The page opened with three always-expanded cards between
+       the headline and the map, so the first thing a visitor met was a wall of
+       explanation they had not asked for. Closed by default, they read as three
+       scannable lines; the detail is one tap away for anyone who wants it. */
+    #mytx15-p1 .p1-step[open]{border-color:rgba(0,32,91,.2)}
+    #mytx15-p1 .p1-step>summary{list-style:none;cursor:pointer;font-size:15px;font-weight:600;color:#00205B}
+    #mytx15-p1 .p1-step>summary::-webkit-details-marker{display:none}
+    #mytx15-p1 .p1-chev{margin-left:auto;width:7px;height:7px;flex:none;
+      border-right:1.6px solid #5E6785;border-bottom:1.6px solid #5E6785;
+      transform:rotate(45deg);transition:transform .18s ease}
+    #mytx15-p1 .p1-step[open] .p1-chev{transform:rotate(-135deg)}
+    @media(prefers-reduced-motion:reduce){#mytx15-p1 .p1-chev{transition:none}}
     #mytx15-p1 .p1-map{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin-bottom:26px}
     #mytx15-p1 .p1-map-cap{padding:14px 16px 8px;text-align:left}
-    #mytx15-p1 .p1-map-cap b{font-family:Georgia,serif;font-size:16px}
+    #mytx15-p1 .p1-map-cap b{font-family:"Museo Slab",Georgia,serif;font-size:16px}
     #mytx15-p1 .p1-map-cap span{font-size:13px;color:#5E6785}
     /* The map page fills whatever height it is given, so these four rules
        are the single place the map's height is decided. */
@@ -65,7 +81,7 @@
       <button type="button" class="on" data-setlang="en">English</button><button type="button" data-setlang="es">Espa&#241;ol</button>
     </div>
   </div>
-  <div style="height:3px;background:linear-gradient(to right,#00205B 0 33.33%,#FFFFFF 33.33% 66.66%,#AD0B32 66.66% 100%)"></div>
+  <div style="height:1px;background:rgba(0,32,91,.12)"></div>
 
   <!-- ENGLISH block (default visible) -->
   <div data-lang-block="en" style="max-width:640px;margin:0 auto;padding:0 16px">
@@ -73,9 +89,9 @@
     <h2 class="p1-headline">Texas redrew its congressional map.<br>Find out where your home landed.</h2>
     <p class="p1-sub">The Legislature adopted new district lines in 2025. The new TX-15 covers 11 counties &amp; 766,987 people. MyTX15 checks your home against the new boundary. Free, no account, about a minute.</p>
     <div style="margin:0 0 22px">
-      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><div><b style="display:block">What you enter</b><span style="display:block;margin-top:1px">Five fields: name, date of birth &amp; address. Pick your address from the suggestion list; that puts your home on the map, not near it. Phone &amp; email are optional. They let us follow up if your registration needs a second look.</span></div></div>
-      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><div><b style="display:block">What we check</b><span style="display:block;margin-top:1px">Your address runs against the TX-15 boundary the Legislature adopted in 2025, then against the district's voter file. Both checks finish in seconds.</span></div></div>
-      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><div><b style="display:block">What you get</b><span style="display:block;margin-top:1px">A clear answer on the new district, your county &amp; voting precinct, and every official who represents your address across five levels: federal, state, county, city &amp; school board.</span></div></div>
+      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><b style="font-weight:600">What you enter</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Five fields: name, date of birth &amp; address. Pick your address from the suggestion list; that puts your home on the map, not near it. Phone &amp; email are optional. They let us follow up if your registration needs a second look.</span></details>
+      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><b style="font-weight:600">What we check</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Your address runs against the TX-15 boundary the Legislature adopted in 2025, then against the district's voter file. Both checks finish in seconds.</span></details>
+      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><b style="font-weight:600">What you get</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">A clear answer on the new district, your county &amp; voting precinct, and every official who represents your address across five levels: federal, state, county, city &amp; school board.</span></details>
     </div>
     <div class="p1-map">
       <div class="p1-map-cap"><b style="display:block">The new District 15 boundary</b><span style="display:block">Everything shaded blue is inside the 2026 lines: 11 counties, stretching from Gonzales in the north down to Edinburg on the border. Pinch to zoom, two fingers to move the map.</span></div>
@@ -90,9 +106,9 @@
     <h2 class="p1-headline">Texas redibuj&#243; su mapa congresional.<br>Vea d&#243;nde qued&#243; su hogar.</h2>
     <p class="p1-sub">La Legislatura adopt&#243; nuevos l&#237;mites de distrito en 2025. El nuevo TX-15 abarca 11 condados y 766,987 habitantes. MyTX15 compara su hogar con el nuevo l&#237;mite. Gratis, sin cuenta, en un minuto.</p>
     <div style="margin:0 0 22px">
-      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><div><b style="display:block">Lo que usted ingresa</b><span style="display:block;margin-top:1px">Cinco campos: nombre, fecha de nacimiento y domicilio. Elija su domicilio de la lista de sugerencias; as&#237; su hogar queda en el mapa, no cerca de &#233;l. El tel&#233;fono y el correo son opcionales. Nos permiten darle seguimiento si su registro necesita una segunda revisi&#243;n.</span></div></div>
-      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><div><b style="display:block">Lo que verificamos</b><span style="display:block;margin-top:1px">Su domicilio se compara con el l&#237;mite del TX-15 que la Legislatura adopt&#243; en 2025, y despu&#233;s con el archivo de votantes del distrito. Ambas verificaciones terminan en segundos.</span></div></div>
-      <div class="p1-step" style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><div><b style="display:block">Lo que usted recibe</b><span style="display:block;margin-top:1px">Una respuesta clara sobre el nuevo distrito, su condado y precinto electoral, y cada funcionario que representa su domicilio en cinco niveles: federal, estatal, condado, ciudad y junta escolar.</span></div></div>
+      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><b style="font-weight:600">Lo que usted ingresa</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Cinco campos: nombre, fecha de nacimiento y domicilio. Elija su domicilio de la lista de sugerencias; as&#237; su hogar queda en el mapa, no cerca de &#233;l. El tel&#233;fono y el correo son opcionales. Nos permiten darle seguimiento si su registro necesita una segunda revisi&#243;n.</span></details>
+      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><b style="font-weight:600">Lo que verificamos</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Su domicilio se compara con el l&#237;mite del TX-15 que la Legislatura adopt&#243; en 2025, y despu&#233;s con el archivo de votantes del distrito. Ambas verificaciones terminan en segundos.</span></details>
+      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><b style="font-weight:600">Lo que usted recibe</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Una respuesta clara sobre el nuevo distrito, su condado y precinto electoral, y cada funcionario que representa su domicilio en cinco niveles: federal, estatal, condado, ciudad y junta escolar.</span></details>
     </div>
     <div class="p1-map">
       <div class="p1-map-cap"><b style="display:block">El nuevo l&#237;mite del Distrito 15</b><span style="display:block">Todo lo sombreado en azul queda dentro de las l&#237;neas de 2026: 11 condados, desde Gonzales en el norte hasta Edinburg en la frontera. Pellizque para acercar, use dos dedos para mover el mapa.</span></div>
