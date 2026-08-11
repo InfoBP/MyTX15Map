@@ -130,9 +130,21 @@
   var cities = [
     {name:"Edinburg",     coords:[26.3017,-98.1633], icon:"icons/guitar-svgrepo-com.svg",                     direction:"right", iconX:0,  iconY:0},
     {name:"Sinton",       coords:[28.0367,-97.5092], icon:"icons/cowboy-boot-svgrepo-com.svg",                direction:"left",  iconX:0,  iconY:0},
-    // iconX nudges the icon west so it stays clear of the district outline on
-    // the coast; the label is still the standard gap away from it.
-    {name:"Rockport",     coords:[28.0206,-97.0544], icon:"icons/beach-svgrepo-com.svg",                      direction:"right", iconX:-3, iconY:0},
+    // Rockport sits right on the coastal boundary, so its icon is nudged west
+    // until it clears the outline. Tuned by reading the district stroke
+    // straight off the overlay canvas and counting border pixels inside the
+    // icon's box, at both breakpoints:
+    //   -3  (original) 154 border px under the icon on desktop
+    //   -13 first value with zero overlap, but only 0.7px of air
+    //   -15 desktop 2.5px clear — yet mobile only 0.6px, because iconX is
+    //       multiplied by adjustmentScale (0.78) while the map itself is
+    //       refitted, so the two do not shrink in step
+    //   -19 mobile 2.9px clear, desktop ~6px, zero overlap at both
+    // Chosen for the mobile figure: this audience is overwhelmingly on phones,
+    // so the tighter of the two breakpoints is the one that has to satisfy the
+    // 2px rule. The label is untouched — it keeps the standard icon-to-name gap
+    // and is allowed to cross the border.
+    {name:"Rockport",     coords:[28.0206,-97.0544], icon:"icons/beach-svgrepo-com.svg",                      direction:"right", iconX:-19, iconY:0},
     {name:"Beeville",     coords:[28.4009,-97.7497], icon:"icons/hat-cowboy-side-svgrepo-com.svg",            direction:"left",  iconX:0,  iconY:0},
     {name:"Alice",        coords:[27.7522,-98.0697], icon:"icons/mexican-moustache-svgrepo-com.svg",          direction:"left",  iconX:0,  iconY:0},
     {name:"Cuero",        coords:[29.0938,-97.2892], icon:"icons/party-fun-dance-enjoy-svgrepo-com.svg",      direction:"right", iconX:0,  iconY:0},
