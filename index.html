@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Texas Congressional District 15 (2026)</title>
+  <meta name="description" content="Interactive map of the new 2026 Texas Congressional District 15 boundary, from the Texas Legislative Council PLANC2333 plan.">
+  <!-- Subresource Integrity: this is a public campaign page loading code from a
+       third-party CDN. The hashes pin the exact Leaflet 1.9.4 bytes, so a
+       compromised or swapped CDN file is refused by the browser rather than
+       executed. Regenerate with:
+         curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"
+        crossorigin="anonymous">
+
+  <style>
+    *{box-sizing:border-box}
+
+    /* This page is designed to be iframed. The map fills the frame, so the
+       EMBEDDING page controls the height with one CSS rule and there is no
+       second source of truth to keep in sync. There is deliberately no <h1>
+       here: the host card already carries a caption, in both languages, and a
+       heading inside the frame would duplicate it (and be stuck in English). */
+    html,body{height:100%;margin:0;padding:0;background:#F7F8F9;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+      color:#152330;-webkit-text-size-adjust:100%}
+
+    #map{width:100%;height:100%;background:#EEF2F4;overflow:hidden}
+
+    /* Shown only if the GeoJSON never arrives. Swapped in by a body class so a
+       partial failure can never leave both the map and the message visible. */
+    #map-fallback{display:none;height:100%;align-items:center;justify-content:center;
+      padding:24px;text-align:center;color:#5E6785;font-size:14px;font-weight:500}
+    body.map-failed #map{display:none}
+    body.map-failed #map-fallback{display:flex}
+
+    /* ---------- City POIs ---------- */
+    .city-marker-wrapper{background:transparent!important;border:none!important}
+    .city-poi{position:relative;width:100%;height:100%;overflow:visible;pointer-events:none}
+    .city-symbol{position:absolute;left:50%;top:50%;display:block;width:100%;height:100%;
+      object-fit:contain;opacity:.96;
+      transform:translate(calc(-50% + var(--icon-x)),calc(-50% + var(--icon-y)));
+      pointer-events:none}
+
+    /* Sharp text, no halo/pill/glow — the label reads as part of the map, not
+       as a UI chip pasted over it. */
+    .city-name{position:absolute;top:50%;margin:0;padding:0;color:#172737;
+      background:transparent!important;font-size:9.2px;font-weight:600;line-height:1;
+      letter-spacing:-.012em;white-space:nowrap;opacity:1;
+      text-shadow:none!important;filter:none!important;backdrop-filter:none!important;
+      transition:none!important;pointer-events:none;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+    /* One gap variable drives both directions, so every label sits exactly the
+       same distance from its icon no matter which side it is on. */
+    .city-name.right{left:50%;
+      transform:translate(calc(var(--icon-x) + var(--half-icon) + var(--poi-gap)),-50%)}
+    .city-name.left{right:50%;
+      transform:translate(calc(-1 * (var(--icon-x) + var(--half-icon) + var(--poi-gap))),-50%)}
+
+    /* ---------- Controls ---------- */
+    .leaflet-control-zoom{overflow:hidden;border:1px solid rgba(20,40,60,.08)!important;
+      border-radius:13px!important;box-shadow:0 4px 16px rgba(20,40,60,.11)!important}
+    .leaflet-control-zoom a{width:34px!important;height:34px!important;line-height:34px!important;
+      border:0!important;color:#17385D!important;background:rgba(255,255,255,.97)!important;
+      font-size:18px!important;font-weight:400!important}
+    .leaflet-control-zoom a:first-child{border-bottom:1px solid rgba(20,40,60,.08)!important}
+    .leaflet-control-attribution{padding:2px 5px!important;background:rgba(255,255,255,.82)!important;
+      color:#87919A!important;font-size:8px!important}
+    .leaflet-control-attribution a{color:#56718C!important}
+
+    @media(max-width:1024px){.city-name{font-size:8.8px}}
+    @media(max-width:700px){.city-name{font-size:8.2px}}
+    @media(max-width:420px){.city-name{font-size:7.8px}}
+  </style>
+</head>
+<body>
+
+<div id="map" role="img"
+     aria-label="Map showing the 2026 Texas Congressional District 15 boundary and selected communities."></div>
+<div id="map-fallback" role="status">Map temporarily unavailable.</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"
+        crossorigin="anonymous"></script>
+<script>
+(function () {
+  "use strict";
+
+  // Every size on the map scales together off one lookup, so a phone gets
+  // smaller icons AND a proportionally smaller icon-to-label gap AND a thinner
+  // district stroke — rather than desktop values crammed into a small frame.
+  function getDeviceSettings() {
+    var w = window.innerWidth;
+    if (w <= 420) return {type:"small-mobile",padding:[5,5], iconSize:9,  poiGap:2,   borderWeight:1.8, adjustmentScale:0.78};
+    if (w <= 700) return {type:"mobile",      padding:[6,6], iconSize:10, poiGap:2.1, borderWeight:2,   adjustmentScale:0.84};
+    if (w <=1024) return {type:"tablet",      padding:[7,7], iconSize:11, poiGap:2.3, borderWeight:2.2, adjustmentScale:0.92};
+    return               {type:"desktop",     padding:[8,8], iconSize:12, poiGap:2.5, borderWeight:2.35,adjustmentScale:1};
+  }
+
+  var device = getDeviceSettings();
+
+  var map = L.map("map", {
+    // Canvas rendering: the district is a single 14k-vertex polygon, markedly
+    // cheaper to draw as canvas than as SVG paths on low-end phones.
+    preferCanvas: true,
+    zoomControl: device.type === "desktop" || device.type === "tablet",
+    // Off so the page still scrolls normally when someone swipes over the
+    // embedded frame on a phone.
+    scrollWheelZoom: false,
+    dragging: true, doubleClickZoom: true, touchZoom: true,
+    boxZoom: false, keyboard: true, attributionControl: true,
+    // Fractional zoom. Leaflet's default whole-number steps overshoot or
+    // undershoot badly on a shape this tall, leaving either a cropped district
+    // or a lot of dead margin; 0.1 lets fitBounds land near-exactly.
+    zoomSnap: 0.1,
+    zoomDelta: 0.5
+  });
+
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+    subdomains: "abcd",
+    maxZoom: 19,
+    // Don't re-request tiles mid-pan; noticeably less network churn on cellular.
+    updateWhenIdle: true,
+    attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+  }).addTo(map);
+
+  // direction "right" => [icon] Name      direction "left" => Name [icon]
+  var cities = [
+    {name:"Edinburg",     coords:[26.3017,-98.1633], icon:"icons/guitar-svgrepo-com.svg",                     direction:"right", iconX:0,  iconY:0},
+    {name:"Sinton",       coords:[28.0367,-97.5092], icon:"icons/cowboy-boot-svgrepo-com.svg",                direction:"left",  iconX:0,  iconY:0},
+    // iconX nudges the icon west so it stays clear of the district outline on
+    // the coast; the label is still the standard gap away from it.
+    {name:"Rockport",     coords:[28.0206,-97.0544], icon:"icons/beach-svgrepo-com.svg",                      direction:"right", iconX:-3, iconY:0},
+    {name:"Beeville",     coords:[28.4009,-97.7497], icon:"icons/hat-cowboy-side-svgrepo-com.svg",            direction:"left",  iconX:0,  iconY:0},
+    {name:"Alice",        coords:[27.7522,-98.0697], icon:"icons/mexican-moustache-svgrepo-com.svg",          direction:"left",  iconX:0,  iconY:0},
+    {name:"Cuero",        coords:[29.0938,-97.2892], icon:"icons/party-fun-dance-enjoy-svgrepo-com.svg",      direction:"right", iconX:0,  iconY:0},
+    {name:"Gonzales",     coords:[29.5016,-97.4525], icon:"icons/strong-bull-side-view-svgrepo-com.svg",      direction:"right", iconX:0,  iconY:0},
+    {name:"Falfurrias",   coords:[27.2265,-98.1449], icon:"icons/mexican-mask-svgrepo-com.svg",               direction:"left",  iconX:0,  iconY:0},
+    {name:"Goliad",       coords:[28.6690,-97.3920], icon:"icons/stand-up-horse-with-jockey-svgrepo-com.svg", direction:"right", iconX:0,  iconY:0},
+    {name:"Hallettsville",coords:[29.4438,-96.9411], icon:"icons/bbq-svgrepo-com.svg",                        direction:"right", iconX:0,  iconY:0},
+    {name:"Refugio",      coords:[28.3058,-97.2746], icon:"icons/deer-facing-right-svgrepo-com.svg",          direction:"right", iconX:0,  iconY:0}
+  ];
+
+  var tx15Layer = null;
+  var cityMarkers = [];
+
+  // Zoom buttons on desktop and tablet only; on a phone they eat map area and
+  // pinch-to-zoom is the expected gesture anyway.
+  function wantsZoomControl() {
+    return device.type === "desktop" || device.type === "tablet";
+  }
+  function syncZoomControl() {
+    var present = !!map.zoomControl && !!map.zoomControl._map;
+    if (wantsZoomControl() && !present) {
+      map.zoomControl = L.control.zoom();
+      map.addControl(map.zoomControl);
+    } else if (!wantsZoomControl() && present) {
+      map.removeControl(map.zoomControl);
+    }
+  }
+
+  function createCityIcon(city) {
+    var size = device.iconSize;
+    var iconX = city.iconX * device.adjustmentScale;
+    var iconY = city.iconY * device.adjustmentScale;
+    var dir = city.direction === "left" ? "left" : "right";
+
+    return L.divIcon({
+      className: "city-marker-wrapper",
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
+      html:
+        '<div class="city-poi" style="width:' + size + 'px;height:' + size + 'px;' +
+        '--half-icon:' + (size / 2) + 'px;--poi-gap:' + device.poiGap + 'px;' +
+        '--icon-x:' + iconX + 'px;--icon-y:' + iconY + 'px;">' +
+          '<img class="city-symbol" src="' + city.icon + '" alt="" aria-hidden="true">' +
+          '<span class="city-name ' + dir + '">' + city.name + '</span>' +
+        '</div>'
+    });
+  }
+
+  function fail(err) {
+    if (err) { try { console.error("TX-15 map failed to load:", err); } catch (e) {} }
+    document.body.className = "map-failed";
+  }
+
+  // force-cache: the geometry is versioned by commit and never edited in
+  // place, so a repeat visitor should reuse it rather than re-download 288 KB.
+  fetch("tx15.geojson", { cache: "force-cache" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("GeoJSON request failed: " + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      if (!data || !data.features || !data.features.length) throw new Error("GeoJSON contained no features");
+
+      tx15Layer = L.geoJSON(data, {
+        style: {
+          color: "#00205B",
+          weight: device.borderWeight,
+          opacity: 0.96,
+          fillColor: "#4B83B7",
+          fillOpacity: 0.22
+        }
+      }).addTo(map);
+
+      function fitDistrict() {
+        device = getDeviceSettings();
+        // Re-measure BEFORE fitting, every time. Leaflet caches the container
+        // size when L.map() runs, and this page is designed to be iframed —
+        // the parent's CSS sets the frame height, which can land after Leaflet
+        // has already measured. Fitting against that stale height silently
+        // overflowed the district off the top and bottom of the frame at
+        // 1280x620 while looking correct at taller sizes, because only the
+        // resize path happened to call this.
+        map.invalidateSize({ animate: false });
+        map.fitBounds(tx15Layer.getBounds(), {
+          padding: device.padding,
+          animate: false,
+          maxZoom: 19
+        });
+      }
+      fitDistrict();
+
+      // One more fit after the frame has definitely settled. Costs nothing when
+      // the first fit was already right, and covers slow webfont/layout shifts
+      // in the embedding page.
+      setTimeout(fitDistrict, 250);
+
+      cities.forEach(function (city) {
+        var marker = L.marker(city.coords, {
+          icon: createCityIcon(city),
+          interactive: false,
+          keyboard: false,
+          // Above the district fill so a coastal icon is never buried by the
+          // polygon it sits on.
+          zIndexOffset: 500
+        }).addTo(map);
+        cityMarkers.push({ marker: marker, city: city });
+      });
+
+      // Debounced: a desktop drag-resize fires continuously, and refitting plus
+      // rebuilding eleven divIcons on every frame is what makes a map feel
+      // broken while you drag.
+      var resizeTimer;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          device = getDeviceSettings();
+          map.invalidateSize();
+          fitDistrict();
+          tx15Layer.setStyle({ weight: device.borderWeight });
+          cityMarkers.forEach(function (item) {
+            item.marker.setIcon(createCityIcon(item.city));
+          });
+          // zoomControl is fixed when L.map() runs, so a tablet rotating across
+          // the 700px boundary would otherwise keep whichever state it loaded
+          // with — controls stuck on a phone-width map, or missing on a
+          // desktop-width one.
+          syncZoomControl();
+        }, 150);
+      });
+    })
+    .catch(fail);
+})();
+</script>
+</body>
+</html>
