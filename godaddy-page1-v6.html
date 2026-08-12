@@ -70,7 +70,12 @@
     at runtime. It must NOT touch the map URL - that is the whole point of the
     map living at a stable GitHub Pages address.
 ====================================================================== -->
-<div id="mytx15-p1" style="background:#E9E9E9;color:#00205B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.5;padding:0 0 10px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)">
+<!-- text-size-adjust:100% is NOT optional here. iOS Safari and Chrome inflate
+     text inside a block they judge to be a "narrow column", and they inflate
+     the SMALL sizes hardest, so the 11.5px pills came out two lines tall on a
+     real phone while sitting on one line in every desktop preview at the same
+     375px width. Setting it pins every size to what is authored. -->
+<div id="mytx15-p1" style="background:#E9E9E9;color:#00205B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.5;padding:0 0 10px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);-webkit-text-size-adjust:100%;text-size-adjust:100%">
   <style>
     @font-face{font-family:"Museo Slab";
       src:url("https://lphg5860uf.c36.airoapp.ai/assets/fonts/MuseoSlab-500.woff2") format("woff2"),
@@ -127,7 +132,10 @@
        grey; the bold weight on the value carries the hierarchy, so the rows
        do not look faded next to it. */
     #mytx15-p1 .p1-row span{color:#00205B}
-    #mytx15-p1 .p1-row b{color:#00205B;font-weight:700;text-align:right}
+    /* flex:1 + min-width:0 so a stacked pill can use the row's full remaining
+       width instead of being squeezed by the label and overflowing the card
+       on a 320px phone. */
+    #mytx15-p1 .p1-row b{color:#00205B;font-weight:700;text-align:right;flex:1 1 auto;min-width:0}
 
     /* ONE pill geometry for every chip on the page. Size, weight, letter
        spacing, padding, radius and border are identical across all four, so
@@ -139,14 +147,15 @@
        countywide voting (the app's own precinct hue from the map legend),
        blue the one thing meant to be tapped. */
     #mytx15-p1 .p1-chip{
-      display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.02em;line-height:1.35;
-      padding:5px 11px;border-radius:999px;border:1px solid transparent;text-decoration:none;
+      display:inline-block;font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.3;
+      padding:4px 10px;border-radius:999px;border:1px solid transparent;text-decoration:none;
+      -webkit-text-size-adjust:100%;text-size-adjust:100%;
     }
     /* Pills that hang under a value rather than sitting beside one. */
-    #mytx15-p1 .p1-chip-stack{display:block;width:fit-content;margin:6px 0 0 auto}
-    /* The countywide note is a short sentence, so it is the one pill allowed
-       to wrap. Same padding and type as the rest. */
-    #mytx15-p1 .p1-chip-wrap{white-space:normal;text-align:right;max-width:215px}
+    #mytx15-p1 .p1-chip-stack{display:block;width:fit-content;margin:5px 0 0 auto}
+    /* Every pill stays on ONE line. The two-line teal blob it used to produce
+       on a phone was the single ugliest thing on the page. */
+    #mytx15-p1 .p1-chip-wrap{white-space:nowrap}
     /* Scoped through .p1-sample: "#mytx15-p1 .p1-row span" sets the grey
        label colour and outranks a bare class, so a one-class selector here
        would silently render every pill grey. */
@@ -246,7 +255,7 @@
         <b style="display:block;margin-top:8px">You're registered in TX-15</b>
       </div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15<span class="p1-chip p1-chip-stack p1-chip-violet">Previously 34</span></b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo<span class="p1-chip p1-chip-stack p1-chip-wrap p1-chip-teal">CWPP: vote at any county location</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo<span class="p1-chip p1-chip-stack p1-chip-wrap p1-chip-teal">CWPP: vote anywhere in county</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Voting precinct</span><b>0242</b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Your officials</span><b><a class="p1-chip p1-chip-blue" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en">26 officials &rsaquo;</a></b></div>
     </div>
@@ -310,7 +319,7 @@
         <b style="display:block;margin-top:8px">Usted est&#225; registrado en el TX-15</b>
       </div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15<span class="p1-chip p1-chip-stack p1-chip-violet">Antes 34</span></b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo<span class="p1-chip p1-chip-stack p1-chip-wrap p1-chip-teal">CWPP: vote en cualquier casilla del condado</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo<span class="p1-chip p1-chip-stack p1-chip-wrap p1-chip-teal">CWPP: cualquier casilla</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Precinto electoral</span><b>0242</b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Sus funcionarios</span><b><a class="p1-chip p1-chip-blue" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es">26 funcionarios &rsaquo;</a></b></div>
     </div>
