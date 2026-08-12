@@ -27,10 +27,10 @@
        mistaken for the visitor's own data. The figures ARE internally
        consistent rather than invented: they are the real result for an
        Alamo address (Hidalgo County, precinct 0242, currently CD-34 and
-       moving to CD-15, a CWPP county, 62 verified officials across the five
-       tiers). If you edit one value, keep the set consistent - a district
-       that moved needs a "Previously" that matches, and only the six SOS
-       CWPP counties get that pill.
+       moving to CD-15, a CWPP county, and the 26 verified officials the
+       County card lists for Hidalgo). If you edit one value, keep the set
+       consistent - a district that moved needs a "Previously" that matches,
+       and only the six SOS CWPP counties get that pill.
     -> Both logos are links. Campaign logo -> bobbypulidofortexas.com.
        MyTX15 wordmark -> pulidoevents.com/mytx15.
     -> Footer carries the SAME legal language as pages 2-4. The policy TEXT is
@@ -111,18 +111,23 @@
     #mytx15-p1 .p1-pill{display:block;width:fit-content;margin:4px 0 0 auto;font-size:11px;font-weight:700;
       padding:2px 8px;border-radius:999px;letter-spacing:.01em}
     /* Each pill gets its own campaign shade so the card reads as several
-       distinct facts. Violet for the prior district (the app's own
-       count-pill hue), green for countywide voting, matching the app. */
-    /* Scoped through .p1-row on purpose: "#mytx15-p1 .p1-row span" sets the
+       distinct facts: violet for the prior district, teal for countywide
+       voting. Teal is the app's own precinct colour (#0E8E8E on the map
+       legend), and sitting between the navy and the violet it separates the
+       two pills without introducing a fourth hue family. Green is left to
+       the INSIDE TX-15 badge, which is the card's one verdict.
+       Scoped through .p1-row on purpose: "#mytx15-p1 .p1-row span" sets the
        grey label colour and outranks a bare class, so without the extra
        class here both pills silently rendered grey. */
     #mytx15-p1 .p1-row .p1-pill-prev{background:#EEEBFA;color:#5B4BC4}
-    #mytx15-p1 .p1-row .p1-pill-cwpp{background:#E8F8F1;color:#14684A;white-space:normal;text-align:right;line-height:1.45;max-width:210px}
-    /* Solid campaign navy: this is the one thing in the card meant to be
-       tapped, and in the app it really does open the officials list. */
-    #mytx15-p1 .p1-view{display:inline-block;font-size:12.5px;font-weight:700;color:#fff !important;background:#00205B;
-      border-radius:999px;padding:6px 13px;text-decoration:none;white-space:nowrap}
-    #mytx15-p1 .p1-view:active{opacity:.85}
+    #mytx15-p1 .p1-row .p1-pill-cwpp{background:#E1F3F3;color:#0B6B6B;white-space:normal;text-align:right;line-height:1.45;max-width:210px}
+    /* Campaign blue, kept at the same light weight as the other three pills
+       so the card reads as one family in four hues: green verdict, violet
+       prior district, teal countywide, blue tap target. The border and the
+       chevron carry the "tappable" signal that the solid fill used to. */
+    #mytx15-p1 .p1-view{display:inline-block;font-size:12.5px;font-weight:700;color:#0B5ED7 !important;background:#E6EFFE;
+      border:1px solid rgba(11,94,215,.25);border-radius:999px;padding:6px 13px;text-decoration:none;white-space:nowrap}
+    #mytx15-p1 .p1-view:active{opacity:.8}
 
     #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
     #mytx15-p1 .p1-cta:active{opacity:.85}
@@ -216,12 +221,12 @@
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15<span class="p1-pill p1-pill-prev">Previously 34</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo<span class="p1-pill p1-pill-cwpp">CWPP: vote at any county location</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Voting precinct</span><b>0242</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Your officials</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en">62 verified &rsaquo;</a></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Your officials</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en">26 officials &rsaquo;</a></b></div>
     </div>
 
     <div class="p1-map">
-      <p class="p1-map-tag">The new District 15 boundary</p>
-      <p class="p1-map-cap">Everything shaded blue is inside the 2026 lines: 11 counties, stretching from Gonzales in the north down to Edinburg on the border. Pinch to zoom, two fingers to move the map.</p>
+      <p class="p1-map-tag">Explore the map</p>
+      <p class="p1-map-cap">Blue is the new TX-15, running from Gonzales County in the north down to the Rio Grande. Find your town, then check your address. Pinch to zoom, use two fingers to move the map.</p>
       <iframe class="p1-map-frame" title="Interactive map of the new Texas Congressional District 15" aria-label="Interactive map showing the 2026 Texas Congressional District 15" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en" style="display:block">Check my address &rarr;</a>
@@ -280,12 +285,12 @@
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15<span class="p1-pill p1-pill-prev">Antes 34</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo<span class="p1-pill p1-pill-cwpp">CWPP: vote en cualquier casilla del condado</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Precinto electoral</span><b>0242</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Sus funcionarios</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es">62 verificados &rsaquo;</a></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Sus funcionarios</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es">26 funcionarios &rsaquo;</a></b></div>
     </div>
 
     <div class="p1-map">
-      <p class="p1-map-tag">El nuevo l&#237;mite del Distrito 15</p>
-      <p class="p1-map-cap">Todo lo sombreado en azul queda dentro de las l&#237;neas de 2026: 11 condados, desde Gonzales en el norte hasta Edinburg en la frontera. Pellizque para acercar, use dos dedos para mover el mapa.</p>
+      <p class="p1-map-tag">Explore el mapa</p>
+      <p class="p1-map-cap">El azul es el nuevo TX-15, desde el condado de Gonzales en el norte hasta el R&#237;o Grande. Busque su pueblo y luego verifique su domicilio. Pellizque para acercar, use dos dedos para mover el mapa.</p>
       <iframe class="p1-map-frame" title="Mapa interactivo del nuevo Distrito Congresional 15 de Texas" aria-label="Mapa interactivo que muestra el Distrito Congresional 15 de Texas para 2026" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es" style="display:block">Verificar mi domicilio &rarr;</a>
