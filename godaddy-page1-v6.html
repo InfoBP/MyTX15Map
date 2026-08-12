@@ -98,10 +98,20 @@
     @media(max-width:700px){#mytx15-p1 .p1-map-frame{height:440px}}
     @media(max-width:420px){#mytx15-p1 .p1-map-frame{height:410px}}
 
-    /* Bottom brand strip - mirrors the app's footer lockup. */
-    #mytx15-p1 .p1-foot{border-top:1px solid rgba(0,32,91,.12);margin-top:6px;padding:18px 16px 4px;text-align:center}
+    /* Bottom brand strip + legal - mirrors the app's footer, same order and
+       same wording. The five policy links point INTO the app rather than
+       repeating the policy text here; see the note by the markup. */
+    #mytx15-p1 .p1-foot{border-top:1px solid rgba(0,32,91,.12);margin-top:6px;padding:24px 16px 8px;text-align:center}
     #mytx15-p1 .p1-foot-name{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:800;color:#00205B;text-decoration:none;letter-spacing:-.01em}
     #mytx15-p1 .p1-foot a:active{opacity:.8}
+    #mytx15-p1 .p1-paid{margin:12px auto 0;padding:9px 16px;max-width:420px;
+      border:2px solid #00205B;border-radius:8px;background:transparent;color:#00205B;
+      font-size:12px;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
+    #mytx15-p1 .p1-legal a{padding:4px 10px;min-height:40px;font-size:13px;font-weight:600;
+      color:#3B4A73;text-decoration:none;line-height:1.4}
+    #mytx15-p1 .p1-legal a:hover{color:#00205B}
+    #mytx15-p1 .p1-note{margin:0 auto;max-width:440px;padding-top:16px;border-top:1px solid rgba(0,32,91,.12);
+      font-size:12px;color:#5E6785;line-height:1.6}
   </style>
 
   <!-- Topbar: logo left, EN/ES right - same shape as pages 2-4.
@@ -178,7 +188,18 @@
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es" style="display:block">Verificar mi domicilio &rarr;</a>
   </div>
 
-  <!-- Bottom brand strip: both logos linked, mirroring the app's footer. -->
+  <!-- Bottom brand strip + legal: same lockup, same paid-for box, same five
+       policy links, same not-official note as pages 2-4.
+
+       The policy TEXT is deliberately not duplicated here. Terms, Privacy,
+       Disclaimer, Accessibility and Contact run to tens of thousands of words
+       across both languages and live in the app's i18n file, which is version
+       controlled and reviewed. A copy pasted into this GoDaddy block would
+       drift from it the first time a policy is revised, and nobody would
+       notice - so these link into the app with ?legal=<section>, which opens
+       that exact section on arrival, in the language chosen here. The links
+       are rewritten by the Gist alongside the CTA, so they survive an app URL
+       change. -->
   <div class="p1-foot">
     <div style="display:flex;align-items:center;justify-content:center;gap:10px">
       <a href="https://www.bobbypulidofortexas.com" target="_blank" rel="noopener" style="display:block" aria-label="Bobby Pulido for Congress - campaign site">
@@ -186,6 +207,14 @@
       </a>
       <a class="p1-foot-name" href="https://pulidoevents.com/mytx15" aria-label="MyTX15 home">MyTX15</a>
     </div>
+
+    <p class="p1-paid" data-legal-paid>Paid by Bobby Pulido for Texas</p>
+
+    <div class="p1-legal" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 6px;margin:14px 0">
+      <a data-legal-link="terms" target="_top" href="https://lphg5860uf.c36.airoapp.ai/?legal=terms">Terms of Use</a><a data-legal-link="privacy" target="_top" href="https://lphg5860uf.c36.airoapp.ai/?legal=privacy">Privacy &amp; Data Use</a><a data-legal-link="disclaimer" target="_top" href="https://lphg5860uf.c36.airoapp.ai/?legal=disclaimer">Disclaimer</a><a data-legal-link="accessibility" target="_top" href="https://lphg5860uf.c36.airoapp.ai/?legal=accessibility">Accessibility</a><a data-legal-link="contact" target="_top" href="https://lphg5860uf.c36.airoapp.ai/?legal=contact">Contact / Support</a>
+    </div>
+
+    <p class="p1-note" data-legal-note>MyTX15 is not an official government website. Results may be incomplete, delayed, or incorrect &mdash; always verify with official sources.</p>
   </div>
 
   <script>
@@ -194,6 +223,9 @@
     if (!root) return;
     var GIST = 'https://gist.githubusercontent.com/InfoBP/c974c9cb7da44a3cb18b8d821723e883/raw/redirect-config.json';
     var lang = (navigator.language || '').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+    // Where the legal sections live. Hardcoded to the current app so the
+    // footer works before the Gist resolves; the Gist upgrades it below.
+    var legalBase = 'https://lphg5860uf.c36.airoapp.ai';
 
     // Enacted PLANC2333 figures, from the Texas Legislative Council's split
     // counties report (same source officials-v3 scope.json cites). `pct` is
@@ -256,8 +288,43 @@
       });
     }
 
+    // Footer legal strings, copied verbatim from the app's i18n.js
+    // (footerTagline / footerTerms / ... / footerNotOfficial) so the two
+    // footers read identically. If those are ever reworded, reword them
+    // here too - this is the one place page 1 repeats app copy, and only
+    // because these are labels, not policy text.
+    var LEGAL_LABELS = {
+      en: {
+        paid: 'Paid by Bobby Pulido for Texas',
+        terms: 'Terms of Use', privacy: 'Privacy & Data Use', disclaimer: 'Disclaimer',
+        accessibility: 'Accessibility', contact: 'Contact / Support',
+        note: 'MyTX15 is not an official government website. Results may be incomplete, delayed, or incorrect — always verify with official sources.'
+      },
+      es: {
+        paid: 'Pagado por Bobby Pulido for Texas',
+        terms: 'Términos de uso', privacy: 'Privacidad y uso de datos', disclaimer: 'Aviso legal',
+        accessibility: 'Accesibilidad', contact: 'Contacto / Soporte',
+        note: 'MyTX15 no es un sitio web oficial del gobierno. Los resultados pueden estar incompletos, retrasados o ser incorrectos — siempre verifique con fuentes oficiales.'
+      }
+    };
+
+    function paintFooter(which) {
+      var labels = LEGAL_LABELS[which] || LEGAL_LABELS.en;
+      var paid = root.querySelector('[data-legal-paid]');
+      if (paid) paid.textContent = labels.paid;
+      var note = root.querySelector('[data-legal-note]');
+      if (note) note.textContent = labels.note;
+      var links = root.querySelectorAll('[data-legal-link]');
+      for (var i = 0; i < links.length; i++) {
+        var name = links[i].getAttribute('data-legal-link');
+        if (labels[name]) links[i].textContent = labels[name];
+        links[i].href = legalBase + '/?lang=' + which + '&legal=' + name;
+      }
+    }
+
     function show(which) {
       lang = which;
+      paintFooter(which);
       var blocks = root.querySelectorAll('[data-lang-block]');
       for (var i = 0; i < blocks.length; i++) {
         blocks[i].style.display = blocks[i].getAttribute('data-lang-block') === which ? '' : 'none';
@@ -290,6 +357,9 @@
         var block = ctas[i].closest ? ctas[i].closest('[data-lang-block]') : null;
         ctas[i].href = base + '/?lang=' + (block ? block.getAttribute('data-lang-block') : 'en');
       }
+      // Legal links follow the app wherever it moves, same as the CTA.
+      legalBase = base;
+      paintFooter(lang);
       var logos = root.querySelectorAll('.p1-logo');
       for (var m = 0; m < logos.length; m++) { logos[m].src = base + '/assets/brand/bp-logo-small.png'; }
     }).catch(function () {});
