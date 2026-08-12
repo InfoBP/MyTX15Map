@@ -39,6 +39,24 @@
        stable GitHub Pages src, same caption, same four height rules. It is
        the closing tease, directly above the only CTA.
 
+  PALETTE - keep new work inside it, this page has no CSS variables because
+  GoDaddy's sanitizer is unpredictable with them:
+    #00205B  campaign navy: headings, labels, values, CTA, paid-for box
+    #3B4A73  intro paragraph and the legal links
+    #5E6785  small supporting text (stat labels, benefit body, map copy)
+    #AD0B32  campaign red: the eyebrow ONLY. It is the page's single accent
+             and stays rare on purpose.
+    #EDEFF5  the one soft-navy tint: all three card header bars and the
+             language toggle. Do not introduce a second near-identical tint.
+    #FFFFFF  cards, on the #E9E9E9 page
+    rgba(0,32,91,.12)  card outlines      rgba(0,32,91,.08)  dividers inside
+                                                             a card
+    Chips: green #1E9E6B/#E8F8F1 verdict, violet #5B4BC4/#EEEBFA prior
+    district, teal #0B6B6B/#E1F3F3 countywide, blue #0B5ED7/#E6EFFE tap
+    target. All four share one geometry (.p1-chip) and a .22 border alpha.
+    Radii: 14px cards, 12px CTA and paid-for box, 10px toggle, 8px toggle
+    buttons, 999px chips.
+
   Still true from v3/v4/v5:
   * GoDaddy strips display:* rules from <style> blocks - every layout-critical
     style (flex rows, circle centering, language hiding) is INLINE, which their
@@ -77,10 +95,10 @@
     #mytx15-p1 .p1-sample-tag,
     #mytx15-p1 .p1-map-tag{
       font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-      color:#00205B;background:#E3E9F6;padding:8px 15px;margin:0;text-align:center;
-      border-bottom:1px solid rgba(0,32,91,.09);
+      color:#00205B;background:#EDEFF5;padding:8px 15px;margin:0;text-align:center;
+      border-bottom:1px solid rgba(0,32,91,.08);
     }
-    #mytx15-p1 .p1-stat{padding:12px 6px;text-align:center;flex:1 1 0;min-width:0;border-left:1px solid rgba(0,32,91,.1)}
+    #mytx15-p1 .p1-stat{padding:12px 6px;text-align:center;flex:1 1 0;min-width:0;border-left:1px solid rgba(0,32,91,.08)}
     #mytx15-p1 .p1-stat:first-child{border-left:0}
     #mytx15-p1 .p1-stat b{font-family:"Museo Slab",Georgia,serif;font-size:18px;font-weight:600;color:#00205B;line-height:1.2}
     #mytx15-p1 .p1-stat span{font-size:11px;color:#5E6785;letter-spacing:.02em;margin-top:2px}
@@ -90,7 +108,10 @@
     #mytx15-p1 .p1-benefit{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;padding:13px 15px;margin-bottom:9px}
     #mytx15-p1 .p1-benefit b{font-size:15px;font-weight:700;color:#00205B}
     #mytx15-p1 .p1-benefit span{font-size:13.5px;color:#5E6785}
-    #mytx15-p1 .p1-tick{flex:none;width:24px;height:24px;border-radius:50%;background:#E8F8F1;color:#1E9E6B;
+    /* Scoped through .p1-benefit: "#mytx15-p1 .p1-benefit span" sets the grey
+       body colour and outranks a bare class, so the check marks were
+       rendering grey-on-green instead of green-on-green. */
+    #mytx15-p1 .p1-benefit .p1-tick{flex:none;width:24px;height:24px;border-radius:50%;background:#E8F8F1;color:#1E9E6B;
       text-align:center;line-height:24px;font-size:13px;font-weight:800}
     #mytx15-p1 .p1-fine{font-size:13px;color:#5E6785;text-align:center;margin:12px 0 24px}
 
@@ -98,7 +119,7 @@
        the app's own result rows, including the qualifier pills, so what a
        visitor sees here is the shape of what they actually get. */
     #mytx15-p1 .p1-sample{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin:0 0 24px}
-    #mytx15-p1 .p1-sample-head{padding:15px 15px 12px;text-align:center;border-bottom:1px solid rgba(0,32,91,.1)}
+    #mytx15-p1 .p1-sample-head{padding:15px 15px 12px;text-align:center;border-bottom:1px solid rgba(0,32,91,.08)}
     #mytx15-p1 .p1-sample-head b{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:600;color:#00205B}
     #mytx15-p1 .p1-row{padding:10px 15px;border-top:1px solid rgba(0,32,91,.08);font-size:14px}
     #mytx15-p1 .p1-row:first-child{border-top:0}
@@ -132,7 +153,7 @@
     #mytx15-p1 .p1-sample .p1-chip-green{background:#E8F8F1;color:#1E9E6B;border-color:rgba(30,158,107,.22)}
     #mytx15-p1 .p1-sample .p1-chip-violet{background:#EEEBFA;color:#5B4BC4;border-color:rgba(91,75,196,.22)}
     #mytx15-p1 .p1-sample .p1-chip-teal{background:#E1F3F3;color:#0B6B6B;border-color:rgba(11,107,107,.22)}
-    #mytx15-p1 .p1-sample a.p1-chip-blue{background:#E6EFFE;color:#0B5ED7;border-color:rgba(11,94,215,.25);white-space:nowrap}
+    #mytx15-p1 .p1-sample a.p1-chip-blue{background:#E6EFFE;color:#0B5ED7;border-color:rgba(11,94,215,.22);white-space:nowrap}
     #mytx15-p1 .p1-sample a.p1-chip-blue:active{opacity:.8}
 
     #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
@@ -153,7 +174,7 @@
     #mytx15-p1 .p1-foot-name{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:800;color:#00205B;text-decoration:none;letter-spacing:-.01em}
     #mytx15-p1 .p1-foot a:active{opacity:.8}
     #mytx15-p1 .p1-paid{margin:12px auto 0;padding:9px 16px;max-width:420px;
-      border:2px solid #00205B;border-radius:8px;background:transparent;color:#00205B;
+      border:2px solid #00205B;border-radius:12px;background:transparent;color:#00205B;
       font-size:12px;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
     #mytx15-p1 .p1-legal a{padding:4px 10px;min-height:40px;font-size:13px;font-weight:600;
       color:#3B4A73;text-decoration:none;line-height:1.4}
@@ -200,7 +221,7 @@
     <div class="p1-benefit">
       <div style="display:flex;gap:11px;align-items:flex-start">
         <span class="p1-tick">&#10003;</span>
-        <span style="display:block"><b style="display:block">If your registration is on file</b><span style="display:block">Checked against the district's voter file in seconds. If we can't confirm it, a real person on our team follows up.</span></span>
+        <span style="display:block"><b style="display:block">If you're registered to vote in TX-15</b><span style="display:block">We check the district's voter file in seconds. If your name does not come up, someone on our team looks into it by hand.</span></span>
       </div>
     </div>
     <div class="p1-benefit">
@@ -232,7 +253,7 @@
 
     <div class="p1-map">
       <p class="p1-map-tag">See what changed</p>
-      <p class="p1-map-cap">Four out of the eleven counties were cut in half by the 2025 lines. Knowing your county is not the same as knowing your district. MyTX15 knows the difference.</p>
+      <p class="p1-map-cap">Four of these counties are now split down the middle. Knowing your county is not the same as knowing your district. MyTX15 knows the difference.</p>
       <iframe class="p1-map-frame" title="Interactive map of the new Texas Congressional District 15" aria-label="Interactive map showing the 2026 Texas Congressional District 15" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en" style="display:block">Check my address &rarr;</a>
@@ -264,7 +285,7 @@
     <div class="p1-benefit">
       <div style="display:flex;gap:11px;align-items:flex-start">
         <span class="p1-tick">&#10003;</span>
-        <span style="display:block"><b style="display:block">Si su registro est&#225; en el archivo</b><span style="display:block">Verificado con el archivo de votantes del distrito en segundos. Si no podemos confirmarlo, una persona de nuestro equipo le da seguimiento.</span></span>
+        <span style="display:block"><b style="display:block">Si est&#225; registrado para votar en el TX-15</b><span style="display:block">Revisamos el archivo de votantes del distrito en segundos. Si su nombre no aparece, alguien de nuestro equipo lo revisa a mano.</span></span>
       </div>
     </div>
     <div class="p1-benefit">
@@ -296,7 +317,7 @@
 
     <div class="p1-map">
       <p class="p1-map-tag">Vea qu&#233; cambi&#243;</p>
-      <p class="p1-map-cap">Cuatro de los once condados quedaron partidos por la mitad con las l&#237;neas de 2025. Saber su condado no es lo mismo que saber su distrito. MyTX15 sabe la diferencia.</p>
+      <p class="p1-map-cap">Cuatro de estos condados ahora est&#225;n divididos por la mitad. Saber su condado no es lo mismo que saber su distrito. MyTX15 sabe la diferencia.</p>
       <iframe class="p1-map-frame" title="Mapa interactivo del nuevo Distrito Congresional 15 de Texas" aria-label="Mapa interactivo que muestra el Distrito Congresional 15 de Texas para 2026" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es" style="display:block">Verificar mi domicilio &rarr;</a>
