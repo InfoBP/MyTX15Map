@@ -99,35 +99,41 @@
        visitor sees here is the shape of what they actually get. */
     #mytx15-p1 .p1-sample{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin:0 0 24px}
     #mytx15-p1 .p1-sample-head{padding:15px 15px 12px;text-align:center;border-bottom:1px solid rgba(0,32,91,.1)}
-    #mytx15-p1 .p1-sample-badge{font-size:11px;font-weight:800;letter-spacing:.03em;color:#1E9E6B;background:#E8F8F1;padding:4px 11px;border-radius:999px}
     #mytx15-p1 .p1-sample-head b{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:600;color:#00205B}
     #mytx15-p1 .p1-row{padding:10px 15px;border-top:1px solid rgba(0,32,91,.08);font-size:14px}
     #mytx15-p1 .p1-row:first-child{border-top:0}
-    #mytx15-p1 .p1-row span{color:#5E6785}
+    /* Labels sit at the same navy as the card's heading rather than a lighter
+       grey; the bold weight on the value carries the hierarchy, so the rows
+       do not look faded next to it. */
+    #mytx15-p1 .p1-row span{color:#00205B}
     #mytx15-p1 .p1-row b{color:#00205B;font-weight:700;text-align:right}
-    /* Qualifier pills, same treatment as the app's result rows: the prior
-       district stacks under the new one, the countywide-voting note under
-       the county name. */
-    #mytx15-p1 .p1-pill{display:block;width:fit-content;margin:4px 0 0 auto;font-size:11px;font-weight:700;
-      padding:2px 8px;border-radius:999px;letter-spacing:.01em}
-    /* Each pill gets its own campaign shade so the card reads as several
-       distinct facts: violet for the prior district, teal for countywide
-       voting. Teal is the app's own precinct colour (#0E8E8E on the map
-       legend), and sitting between the navy and the violet it separates the
-       two pills without introducing a fourth hue family. Green is left to
-       the INSIDE TX-15 badge, which is the card's one verdict.
-       Scoped through .p1-row on purpose: "#mytx15-p1 .p1-row span" sets the
-       grey label colour and outranks a bare class, so without the extra
-       class here both pills silently rendered grey. */
-    #mytx15-p1 .p1-row .p1-pill-prev{background:#EEEBFA;color:#5B4BC4}
-    #mytx15-p1 .p1-row .p1-pill-cwpp{background:#E1F3F3;color:#0B6B6B;white-space:normal;text-align:right;line-height:1.45;max-width:210px}
-    /* Campaign blue, kept at the same light weight as the other three pills
-       so the card reads as one family in four hues: green verdict, violet
-       prior district, teal countywide, blue tap target. The border and the
-       chevron carry the "tappable" signal that the solid fill used to. */
-    #mytx15-p1 .p1-view{display:inline-block;font-size:12.5px;font-weight:700;color:#0B5ED7 !important;background:#E6EFFE;
-      border:1px solid rgba(11,94,215,.25);border-radius:999px;padding:6px 13px;text-decoration:none;white-space:nowrap}
-    #mytx15-p1 .p1-view:active{opacity:.8}
+
+    /* ONE pill geometry for every chip on the page. Size, weight, letter
+       spacing, padding, radius and border are identical across all four, so
+       hue is the ONLY thing that varies and the card reads as a designed set
+       rather than four chips that grew separately. Every pill carries a 1px
+       border (tinted, or transparent) so none of them is a different box
+       size from its neighbours.
+       Colours: green is the verdict, violet the prior district, teal
+       countywide voting (the app's own precinct hue from the map legend),
+       blue the one thing meant to be tapped. */
+    #mytx15-p1 .p1-chip{
+      display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.02em;line-height:1.35;
+      padding:5px 11px;border-radius:999px;border:1px solid transparent;text-decoration:none;
+    }
+    /* Pills that hang under a value rather than sitting beside one. */
+    #mytx15-p1 .p1-chip-stack{display:block;width:fit-content;margin:6px 0 0 auto}
+    /* The countywide note is a short sentence, so it is the one pill allowed
+       to wrap. Same padding and type as the rest. */
+    #mytx15-p1 .p1-chip-wrap{white-space:normal;text-align:right;max-width:215px}
+    /* Scoped through .p1-sample: "#mytx15-p1 .p1-row span" sets the grey
+       label colour and outranks a bare class, so a one-class selector here
+       would silently render every pill grey. */
+    #mytx15-p1 .p1-sample .p1-chip-green{background:#E8F8F1;color:#1E9E6B;border-color:rgba(30,158,107,.22)}
+    #mytx15-p1 .p1-sample .p1-chip-violet{background:#EEEBFA;color:#5B4BC4;border-color:rgba(91,75,196,.22)}
+    #mytx15-p1 .p1-sample .p1-chip-teal{background:#E1F3F3;color:#0B6B6B;border-color:rgba(11,107,107,.22)}
+    #mytx15-p1 .p1-sample a.p1-chip-blue{background:#E6EFFE;color:#0B5ED7;border-color:rgba(11,94,215,.25);white-space:nowrap}
+    #mytx15-p1 .p1-sample a.p1-chip-blue:active{opacity:.8}
 
     #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
     #mytx15-p1 .p1-cta:active{opacity:.85}
@@ -215,18 +221,18 @@
     <div class="p1-sample">
       <div class="p1-sample-tag">Sample result</div>
       <div class="p1-sample-head">
-        <span class="p1-sample-badge">INSIDE TX-15</span>
+        <span class="p1-chip p1-chip-green">INSIDE TX-15</span>
         <b style="display:block;margin-top:8px">You're registered in TX-15</b>
       </div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15<span class="p1-pill p1-pill-prev">Previously 34</span></b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo<span class="p1-pill p1-pill-cwpp">CWPP: vote at any county location</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15<span class="p1-chip p1-chip-stack p1-chip-violet">Previously 34</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo<span class="p1-chip p1-chip-stack p1-chip-wrap p1-chip-teal">CWPP: vote at any county location</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Voting precinct</span><b>0242</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Your officials</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en">26 officials &rsaquo;</a></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Your officials</span><b><a class="p1-chip p1-chip-blue" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en">26 officials &rsaquo;</a></b></div>
     </div>
 
     <div class="p1-map">
       <p class="p1-map-tag">Explore the map</p>
-      <p class="p1-map-cap">Blue is the new TX-15, running from Gonzales County in the north down to the Rio Grande. Find your town, then check your address. Pinch to zoom, use two fingers to move the map.</p>
+      <p class="p1-map-cap">Everything in blue is the new TX-15. The 2025 lines split four of these counties down the middle, so your county alone will not tell you where you stand. Pinch to zoom, use two fingers to move the map. The button below checks your exact address.</p>
       <iframe class="p1-map-frame" title="Interactive map of the new Texas Congressional District 15" aria-label="Interactive map showing the 2026 Texas Congressional District 15" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en" style="display:block">Check my address &rarr;</a>
@@ -279,18 +285,18 @@
     <div class="p1-sample">
       <div class="p1-sample-tag">Ejemplo de resultado</div>
       <div class="p1-sample-head">
-        <span class="p1-sample-badge">DENTRO DEL TX-15</span>
+        <span class="p1-chip p1-chip-green">DENTRO DEL TX-15</span>
         <b style="display:block;margin-top:8px">Usted est&#225; registrado en el TX-15</b>
       </div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15<span class="p1-pill p1-pill-prev">Antes 34</span></b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo<span class="p1-pill p1-pill-cwpp">CWPP: vote en cualquier casilla del condado</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15<span class="p1-chip p1-chip-stack p1-chip-violet">Antes 34</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo<span class="p1-chip p1-chip-stack p1-chip-wrap p1-chip-teal">CWPP: vote en cualquier casilla del condado</span></b></div>
       <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Precinto electoral</span><b>0242</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Sus funcionarios</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es">26 funcionarios &rsaquo;</a></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Sus funcionarios</span><b><a class="p1-chip p1-chip-blue" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es">26 funcionarios &rsaquo;</a></b></div>
     </div>
 
     <div class="p1-map">
       <p class="p1-map-tag">Explore el mapa</p>
-      <p class="p1-map-cap">El azul es el nuevo TX-15, desde el condado de Gonzales en el norte hasta el R&#237;o Grande. Busque su pueblo y luego verifique su domicilio. Pellizque para acercar, use dos dedos para mover el mapa.</p>
+      <p class="p1-map-cap">Todo lo azul es el nuevo TX-15. Las l&#237;neas de 2025 dividieron cuatro de estos condados por la mitad, as&#237; que su condado por s&#237; solo no le dice d&#243;nde queda usted. Pellizque para acercar, use dos dedos para mover el mapa. El bot&#243;n de abajo verifica su domicilio exacto.</p>
       <iframe class="p1-map-frame" title="Mapa interactivo del nuevo Distrito Congresional 15 de Texas" aria-label="Mapa interactivo que muestra el Distrito Congresional 15 de Texas para 2026" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <a class="p1-cta" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es" style="display:block">Verificar mi domicilio &rarr;</a>
