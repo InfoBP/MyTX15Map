@@ -23,8 +23,14 @@
        payoff lines, then a sample-result card so a visitor can see the shape
        of the answer before deciding to enter anything.
     -> The sample card is labeled "Sample result" / "Ejemplo" in both
-       languages and uses an obviously generic address. It must never be
-       mistaken for the visitor's own data.
+       languages and carries no name or street address, so it can never be
+       mistaken for the visitor's own data. The figures ARE internally
+       consistent rather than invented: they are the real result for an
+       Alamo address (Hidalgo County, precinct 0242, currently CD-34 and
+       moving to CD-15, a CWPP county, 62 verified officials across the five
+       tiers). If you edit one value, keep the set consistent - a district
+       that moved needs a "Previously" that matches, and only the six SOS
+       CWPP counties get that pill.
     -> Both logos are links. Campaign logo -> bobbypulidofortexas.com.
        MyTX15 wordmark -> pulidoevents.com/mytx15.
     -> Footer carries the SAME legal language as pages 2-4. The policy TEXT is
@@ -79,10 +85,12 @@
       text-align:center;line-height:24px;font-size:13px;font-weight:800}
     #mytx15-p1 .p1-fine{font-size:13px;color:#5E6785;text-align:center;margin:12px 0 24px}
 
-    /* Sample result card - a taste of the answer, never the answer. */
+    /* Sample result card - a taste of the answer, never the answer. Mirrors
+       the app's own result rows, including the qualifier pills, so what a
+       visitor sees here is the shape of what they actually get. */
     #mytx15-p1 .p1-sample{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin:0 0 24px}
     #mytx15-p1 .p1-sample-tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-      color:#5E6785;background:#EDEFF5;padding:7px 15px}
+      color:#5E6785;background:#EDEFF5;padding:7px 15px;text-align:center}
     #mytx15-p1 .p1-sample-head{padding:15px 15px 12px;text-align:center;border-bottom:1px solid rgba(0,32,91,.1)}
     #mytx15-p1 .p1-sample-badge{font-size:11px;font-weight:800;letter-spacing:.03em;color:#1E9E6B;background:#E8F8F1;padding:4px 11px;border-radius:999px}
     #mytx15-p1 .p1-sample-head b{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:600;color:#00205B}
@@ -90,6 +98,18 @@
     #mytx15-p1 .p1-row:first-child{border-top:0}
     #mytx15-p1 .p1-row span{color:#5E6785}
     #mytx15-p1 .p1-row b{color:#00205B;font-weight:700;text-align:right}
+    /* Qualifier pills, same treatment as the app's result rows: the prior
+       district stacks under the new one, the countywide-voting note under
+       the county name. */
+    #mytx15-p1 .p1-pill{display:block;width:fit-content;margin:4px 0 0 auto;font-size:11px;font-weight:700;
+      padding:2px 8px;border-radius:999px;letter-spacing:.01em}
+    #mytx15-p1 .p1-pill-prev{background:#EDEFF5;color:#5E6785}
+    #mytx15-p1 .p1-pill-cwpp{background:#E8F8F1;color:#14684A;white-space:normal;text-align:right;line-height:1.45;max-width:210px}
+    /* Reads as tappable because in the app it is: the officials list opens
+       from a row exactly like this one. */
+    #mytx15-p1 .p1-view{display:inline-block;font-size:12.5px;font-weight:700;color:#00205B;background:#EDEFF5;
+      border:1px solid rgba(0,32,91,.15);border-radius:999px;padding:5px 12px;text-decoration:none;white-space:nowrap}
+    #mytx15-p1 .p1-view:active{opacity:.8}
 
     #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
     #mytx15-p1 .p1-cta:active{opacity:.85}
@@ -182,10 +202,10 @@
         <span class="p1-sample-badge">INSIDE TX-15</span>
         <b style="display:block;margin-top:8px">You're registered in TX-15</b>
       </div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Voting precinct</span><b>0107</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Your officials</span><b>26 verified</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15<span class="p1-pill p1-pill-prev">Previously 34</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo<span class="p1-pill p1-pill-cwpp">CWPP: vote at any county location</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Voting precinct</span><b>0242</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Your officials</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=en">62 verified &rsaquo;</a></b></div>
     </div>
 
     <div class="p1-map">
@@ -245,10 +265,10 @@
         <span class="p1-sample-badge">DENTRO DEL TX-15</span>
         <b style="display:block;margin-top:8px">Usted est&#225; registrado en el TX-15</b>
       </div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Precinto electoral</span><b>0107</b></div>
-      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Sus funcionarios</span><b>26 verificados</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15<span class="p1-pill p1-pill-prev">Antes 34</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo<span class="p1-pill p1-pill-cwpp">CWPP: vote en cualquier casilla del condado</span></b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Precinto electoral</span><b>0242</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span>Sus funcionarios</span><b><a class="p1-view" data-cta target="_top" href="https://lphg5860uf.c36.airoapp.ai/?lang=es">62 verificados &rsaquo;</a></b></div>
     </div>
 
     <div class="p1-map">
