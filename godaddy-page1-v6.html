@@ -58,10 +58,17 @@
     #mytx15-p1 .p1-headline{font-family:"Museo Slab",Georgia,serif;font-size:clamp(28px,7vw,40px);font-weight:600;line-height:1.12;text-align:center;margin:0 0 12px;color:#00205B}
     #mytx15-p1 .p1-sub{font-size:16px;color:#3B4A73;text-align:center;max-width:46ch;margin:0 auto 18px}
 
-    /* Stat strip - three equal tiles, wrapping on narrow phones. */
-    #mytx15-p1 .p1-stat{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:12px;padding:10px 8px;text-align:center;flex:1 1 0;min-width:92px}
-    #mytx15-p1 .p1-stat b{font-family:"Museo Slab",Georgia,serif;font-size:19px;font-weight:600;color:#00205B}
-    #mytx15-p1 .p1-stat span{font-size:11.5px;color:#5E6785;letter-spacing:.02em}
+    /* Stat strip. One card, not three loose tiles: floating straight after
+       the intro paragraph the numbers had no subject, so they read as
+       decoration. The label gives them one, and a single bordered object
+       sits under a paragraph far better than three. */
+    #mytx15-p1 .p1-stats{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin:0 0 8px}
+    #mytx15-p1 .p1-stats-label{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+      color:#5E6785;background:#EDEFF5;padding:7px 15px;margin:0;text-align:center}
+    #mytx15-p1 .p1-stat{padding:12px 6px;text-align:center;flex:1 1 0;min-width:0;border-left:1px solid rgba(0,32,91,.1)}
+    #mytx15-p1 .p1-stat:first-child{border-left:0}
+    #mytx15-p1 .p1-stat b{font-family:"Museo Slab",Georgia,serif;font-size:18px;font-weight:600;color:#00205B;line-height:1.2}
+    #mytx15-p1 .p1-stat span{font-size:11px;color:#5E6785;letter-spacing:.02em;margin-top:2px}
 
     /* Benefits - always visible, no taps to reveal. */
     #mytx15-p1 .p1-lead{font-family:"Museo Slab",Georgia,serif;font-size:19px;font-weight:600;text-align:center;margin:26px 0 14px;color:#00205B}
@@ -131,10 +138,13 @@
     <h2 class="p1-headline">Texas redrew its congressional map. Find out where your home landed.</h2>
     <p class="p1-sub">The Legislature adopted new district lines in 2025. Hundreds of thousands of Texans changed congressional districts and most of them still don't know it.</p>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px">
-      <div class="p1-stat"><b style="display:block">11</b><span style="display:block">counties</span></div>
-      <div class="p1-stat"><b style="display:block">766,987</b><span style="display:block">residents</span></div>
-      <div class="p1-stat"><b style="display:block">2026</b><span style="display:block">election cycle</span></div>
+    <div class="p1-stats">
+      <p class="p1-stats-label">The new TX-15</p>
+      <div style="display:flex">
+        <div class="p1-stat"><b style="display:block">11</b><span style="display:block">counties</span></div>
+        <div class="p1-stat"><b style="display:block">766,987</b><span style="display:block">residents</span></div>
+        <div class="p1-stat"><b style="display:block">2026</b><span style="display:block">first election</span></div>
+      </div>
     </div>
 
     <p class="p1-lead">In about a minute, you'll know:</p>
@@ -191,10 +201,13 @@
     <h2 class="p1-headline">Texas redibuj&#243; su mapa congresional. Vea d&#243;nde qued&#243; su hogar.</h2>
     <p class="p1-sub">La Legislatura adopt&#243; nuevos l&#237;mites de distrito en 2025. Cientos de miles de personas cambiaron de distrito congresional y la mayor&#237;a a&#250;n no lo sabe.</p>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px">
-      <div class="p1-stat"><b style="display:block">11</b><span style="display:block">condados</span></div>
-      <div class="p1-stat"><b style="display:block">766,987</b><span style="display:block">habitantes</span></div>
-      <div class="p1-stat"><b style="display:block">2026</b><span style="display:block">ciclo electoral</span></div>
+    <div class="p1-stats">
+      <p class="p1-stats-label">El nuevo TX-15</p>
+      <div style="display:flex">
+        <div class="p1-stat"><b style="display:block">11</b><span style="display:block">condados</span></div>
+        <div class="p1-stat"><b style="display:block">766,987</b><span style="display:block">habitantes</span></div>
+        <div class="p1-stat"><b style="display:block">2026</b><span style="display:block">primera elecci&#243;n</span></div>
+      </div>
     </div>
 
     <p class="p1-lead">En un minuto, usted sabr&#225;:</p>
