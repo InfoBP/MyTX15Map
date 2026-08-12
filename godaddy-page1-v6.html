@@ -3,27 +3,35 @@
   Paste into: GoDaddy Website Builder -> Welcome page -> Custom Code block.
   REPLACE the whole previous block; do not paste this below v5.
 
+  WHAT THIS PAGE IS FOR (Marco, 2026-08-12): marketing. Tell a voter, fast,
+  that the map changed, sell what the app does, and get them to tap through.
+  It must NOT answer the question the app exists to answer.
+
+  A county picker lived here briefly and was cut for exactly that reason: it
+  told people "your county is in TX-15" in one tap, which is the answer most
+  visitors came for, so they had no reason to run the check that finds their
+  precinct, their registration status and their 26 officials. Page 1 shows a
+  taste; the app gives the answer. Do not reintroduce a county-level lookup
+  on this page.
+
   v6 changes (v5 -> v6):
-    -> HEADER now matches pages 2-4 exactly: campaign logo left, EN/ES toggle
-       right, nothing between them. The "2026 Cycle" badge is gone from the
-       header and its information lives in the body as a stat strip, where it
-       actually says something.
+    -> HEADER matches pages 2-4: campaign logo left, EN/ES toggle right. The
+       "2026 Cycle" badge is gone from the header; its information is now one
+       of three stat tiles in the body, where it says something.
+    -> NO ACCORDIONS. v5's three collapsed "how it works" cards hid the sales
+       pitch behind taps. The benefits are always visible now: four short
+       payoff lines, then a sample-result card so a visitor can see the shape
+       of the answer before deciding to enter anything.
+    -> The sample card is labeled "Sample result" / "Ejemplo" in both
+       languages and uses an obviously generic address. It must never be
+       mistaken for the visitor's own data.
     -> Both logos are links. Campaign logo -> bobbypulidofortexas.com.
-       MyTX15 wordmark in the new bottom strip -> pulidoevents.com/mytx15.
-    -> NEW: county checker. Eleven tappable county chips answer the one
-       question that brings people here ("does this even affect me?") before
-       they commit to a form. Each answer is generated from the enacted
-       PLANC2333 figures, NOT rounded prose:
-         whole counties  -> Bee, Brooks, DeWitt, Goliad, Gonzales, Jim Wells,
-                            Lavaca
-         split counties  -> Aransas 82.3%, Hidalgo 63.6%, Refugio 89.8%,
-                            San Patricio 63.6%
-       Counties whose CURRENT district is not 15 are told they are moving in;
-       Brooks and Jim Wells are already 15 and are told their number does not
-       change. Every split county's answer ends by saying only an address
-       check can place them, which is exactly what the CTA does.
+       MyTX15 wordmark -> pulidoevents.com/mytx15.
+    -> Footer carries the SAME legal language as pages 2-4. The policy TEXT is
+       deliberately not duplicated here - see the note by that markup.
     -> THE MAP BLOCK IS UNCHANGED from v5, deliberately: same iframe, same
-       stable GitHub Pages src, same caption, same four height rules.
+       stable GitHub Pages src, same caption, same four height rules. It is
+       the closing tease, directly above the only CTA.
 
   Still true from v3/v4/v5:
   * GoDaddy strips display:* rules from <style> blocks - every layout-critical
@@ -34,8 +42,8 @@
   * One CTA only (below the map), per Marco.
   * CTA links carry target="_top" - inside the builder preview (an iframe) the
     app's frame-ancestors CSP blocked navigation and showed a blank stuck page.
-  * The Gist still upgrades the CTA destination and the campaign logo at
-    runtime. It must NOT touch the map URL - that is the whole point of the
+  * The Gist still upgrades the CTA destination, the logos and the legal links
+    at runtime. It must NOT touch the map URL - that is the whole point of the
     map living at a stable GitHub Pages address.
 ====================================================================== -->
 <div id="mytx15-p1" style="background:#E9E9E9;color:#00205B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.5;padding:0 0 10px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)">
@@ -50,43 +58,34 @@
     #mytx15-p1 .p1-headline{font-family:"Museo Slab",Georgia,serif;font-size:clamp(28px,7vw,40px);font-weight:600;line-height:1.12;text-align:center;margin:0 0 12px;color:#00205B}
     #mytx15-p1 .p1-sub{font-size:16px;color:#3B4A73;text-align:center;max-width:46ch;margin:0 auto 18px}
 
-    /* Stat strip - the old header badge's information, given room to mean
-       something. Three equal tiles, wrapping on narrow phones. */
+    /* Stat strip - three equal tiles, wrapping on narrow phones. */
     #mytx15-p1 .p1-stat{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:12px;padding:10px 8px;text-align:center;flex:1 1 0;min-width:92px}
     #mytx15-p1 .p1-stat b{font-family:"Museo Slab",Georgia,serif;font-size:19px;font-weight:600;color:#00205B}
     #mytx15-p1 .p1-stat span{font-size:11.5px;color:#5E6785;letter-spacing:.02em}
 
-    /* County checker */
-    #mytx15-p1 .p1-card{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;padding:16px;margin:0 0 18px}
-    #mytx15-p1 .p1-card h3{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:600;margin:0 0 3px;color:#00205B}
-    #mytx15-p1 .p1-card-sub{font-size:13.5px;color:#5E6785;margin:0 0 12px}
-    #mytx15-p1 .p1-chip{border:1px solid rgba(0,32,91,.18);background:#F7F8FB;color:#00205B;
-      font-size:13.5px;font-weight:600;padding:9px 13px;border-radius:999px;cursor:pointer;
-      min-height:40px;font-family:inherit;transition:background .15s,border-color .15s}
-    #mytx15-p1 .p1-chip:hover{background:#EDEFF5}
-    #mytx15-p1 .p1-chip.on{background:#00205B;border-color:#00205B;color:#fff}
-    #mytx15-p1 .p1-answer{border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.55;margin-top:12px}
-    #mytx15-p1 .p1-answer.in{background:#E8F8F1;color:#14684A;border:1px solid rgba(30,158,107,.25)}
-    #mytx15-p1 .p1-answer.split{background:#FDF3E0;color:#7A5600;border:1px solid rgba(138,97,0,.22)}
-    @media(prefers-reduced-motion:reduce){#mytx15-p1 .p1-chip{transition:none}}
+    /* Benefits - always visible, no taps to reveal. */
+    #mytx15-p1 .p1-lead{font-family:"Museo Slab",Georgia,serif;font-size:19px;font-weight:600;text-align:center;margin:26px 0 14px;color:#00205B}
+    #mytx15-p1 .p1-benefit{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;padding:13px 15px;margin-bottom:9px}
+    #mytx15-p1 .p1-benefit b{font-size:15px;font-weight:700;color:#00205B}
+    #mytx15-p1 .p1-benefit span{font-size:13.5px;color:#5E6785}
+    #mytx15-p1 .p1-tick{flex:none;width:24px;height:24px;border-radius:50%;background:#E8F8F1;color:#1E9E6B;
+      text-align:center;line-height:24px;font-size:13px;font-weight:800}
+    #mytx15-p1 .p1-fine{font-size:13px;color:#5E6785;text-align:center;margin:12px 0 24px}
+
+    /* Sample result card - a taste of the answer, never the answer. */
+    #mytx15-p1 .p1-sample{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin:0 0 24px}
+    #mytx15-p1 .p1-sample-tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+      color:#5E6785;background:#EDEFF5;padding:7px 15px}
+    #mytx15-p1 .p1-sample-head{padding:15px 15px 12px;text-align:center;border-bottom:1px solid rgba(0,32,91,.1)}
+    #mytx15-p1 .p1-sample-badge{font-size:11px;font-weight:800;letter-spacing:.03em;color:#1E9E6B;background:#E8F8F1;padding:4px 11px;border-radius:999px}
+    #mytx15-p1 .p1-sample-head b{font-family:"Museo Slab",Georgia,serif;font-size:17px;font-weight:600;color:#00205B}
+    #mytx15-p1 .p1-row{padding:10px 15px;border-top:1px solid rgba(0,32,91,.08);font-size:14px}
+    #mytx15-p1 .p1-row:first-child{border-top:0}
+    #mytx15-p1 .p1-row span{color:#5E6785}
+    #mytx15-p1 .p1-row b{color:#00205B;font-weight:700;text-align:right}
 
     #mytx15-p1 .p1-cta{text-align:center;background:#00205B;color:#fff !important;text-decoration:none;font-weight:600;font-size:17px;padding:16px 20px;border-radius:12px;margin:0 auto 26px;max-width:420px}
     #mytx15-p1 .p1-cta:active{opacity:.85}
-    #mytx15-p1 .p1-step{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;padding:14px 16px;text-align:left;margin-bottom:10px}
-    #mytx15-p1 .p1-step b{font-size:15px}
-    #mytx15-p1 .p1-step span{font-size:13.5px;color:#5E6785}
-    /* Steps collapse. The page opened with three always-expanded cards between
-       the headline and the map, so the first thing a visitor met was a wall of
-       explanation they had not asked for. Closed by default, they read as three
-       scannable lines; the detail is one tap away for anyone who wants it. */
-    #mytx15-p1 .p1-step[open]{border-color:rgba(0,32,91,.2)}
-    #mytx15-p1 .p1-step>summary{list-style:none;cursor:pointer;font-size:15px;font-weight:600;color:#00205B}
-    #mytx15-p1 .p1-step>summary::-webkit-details-marker{display:none}
-    #mytx15-p1 .p1-chev{margin-left:auto;width:7px;height:7px;flex:none;
-      border-right:1.6px solid #5E6785;border-bottom:1.6px solid #5E6785;
-      transform:rotate(45deg);transition:transform .18s ease}
-    #mytx15-p1 .p1-step[open] .p1-chev{transform:rotate(-135deg)}
-    @media(prefers-reduced-motion:reduce){#mytx15-p1 .p1-chev{transition:none}}
     #mytx15-p1 .p1-map{background:#fff;border:1px solid rgba(0,32,91,.12);border-radius:14px;overflow:hidden;margin-bottom:26px}
     #mytx15-p1 .p1-map-cap{padding:14px 16px 8px;text-align:left}
     #mytx15-p1 .p1-map-cap b{font-family:"Museo Slab",Georgia,serif;font-size:16px}
@@ -130,26 +129,55 @@
   <div data-lang-block="en" style="max-width:640px;margin:0 auto;padding:0 16px">
     <p class="p1-eyebrow">Texas Congressional District 15</p>
     <h2 class="p1-headline">Texas redrew its congressional map.<br>Find out where your home landed.</h2>
-    <p class="p1-sub">The Legislature adopted new district lines in 2025. MyTX15 checks your home against the new boundary. Free, no account, about a minute.</p>
+    <p class="p1-sub">The Legislature adopted new district lines in 2025. Hundreds of thousands of South Texans changed districts and most of them still don't know it.</p>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px">
       <div class="p1-stat"><b style="display:block">11</b><span style="display:block">counties</span></div>
       <div class="p1-stat"><b style="display:block">766,987</b><span style="display:block">residents</span></div>
       <div class="p1-stat"><b style="display:block">2026</b><span style="display:block">election cycle</span></div>
     </div>
 
-    <div class="p1-card">
-      <h3>Start here: is your county in the new TX-15?</h3>
-      <p class="p1-card-sub">Tap your county for a straight answer. No form, no waiting.</p>
-      <div data-chips style="display:flex;flex-wrap:wrap;gap:8px"></div>
-      <div data-answer style="display:none"></div>
+    <p class="p1-lead">In about a minute, you'll know:</p>
+
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Whether you're still in TX-15</b><span style="display:block">Your exact address checked against the 2026 boundary &mdash; not your county, not your ZIP.</span></span>
+      </div>
+    </div>
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">If your registration is on file</b><span style="display:block">Checked against the district's voter file in seconds. If we can't confirm it, a real person on our team follows up.</span></span>
+      </div>
+    </div>
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Your county, precinct &amp; where you vote</b><span style="display:block">Down to your voting precinct number &mdash; and whether your county lets you vote at any location on election day.</span></span>
+      </div>
+    </div>
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Every official who answers to you</b><span style="display:block">All five levels &mdash; Congress, state, county, city, school board &mdash; with terms, phone numbers and what each office actually does.</span></span>
+      </div>
     </div>
 
-    <div style="margin:0 0 22px">
-      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><b style="font-weight:600">What you enter</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Five fields: name, date of birth &amp; address. Pick your address from the suggestion list; that puts your home on the map, not near it. Phone &amp; email are optional. They let us follow up if your registration needs a second look.</span></details>
-      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><b style="font-weight:600">What we check</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Your address runs against the TX-15 boundary the Legislature adopted in 2025, then against the district's voter file. Both checks finish in seconds.</span></details>
-      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><b style="font-weight:600">What you get</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">A clear answer on the new district, your county &amp; voting precinct, and every official who represents your address across five levels: federal, state, county, city &amp; school board.</span></details>
+    <p class="p1-fine">Free &middot; No account &middot; English or Spanish &middot; About a minute</p>
+
+    <div class="p1-sample">
+      <div class="p1-sample-tag">Sample result</div>
+      <div class="p1-sample-head">
+        <span class="p1-sample-badge">INSIDE TX-15</span>
+        <b style="display:block;margin-top:8px">You're registered in TX-15</b>
+      </div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Congressional District</span><b>District 15</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>County</span><b>Hidalgo</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Voting precinct</span><b>0107</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Your officials</span><b>26 verified</b></div>
     </div>
+
     <div class="p1-map">
       <div class="p1-map-cap"><b style="display:block">The new District 15 boundary</b><span style="display:block">Everything shaded blue is inside the 2026 lines: 11 counties, stretching from Gonzales in the north down to Edinburg on the border. Pinch to zoom, two fingers to move the map.</span></div>
       <iframe class="p1-map-frame" title="Interactive map of the new Texas Congressional District 15" aria-label="Interactive map showing the 2026 Texas Congressional District 15" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -161,26 +189,55 @@
   <div data-lang-block="es" style="max-width:640px;margin:0 auto;padding:0 16px;display:none">
     <p class="p1-eyebrow">Distrito Congresional 15 de Texas</p>
     <h2 class="p1-headline">Texas redibuj&#243; su mapa congresional.<br>Vea d&#243;nde qued&#243; su hogar.</h2>
-    <p class="p1-sub">La Legislatura adopt&#243; nuevos l&#237;mites de distrito en 2025. MyTX15 compara su hogar con el nuevo l&#237;mite. Gratis, sin cuenta, en un minuto.</p>
+    <p class="p1-sub">La Legislatura adopt&#243; nuevos l&#237;mites de distrito en 2025. Cientos de miles de personas del Sur de Texas cambiaron de distrito y la mayor&#237;a a&#250;n no lo sabe.</p>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px">
       <div class="p1-stat"><b style="display:block">11</b><span style="display:block">condados</span></div>
       <div class="p1-stat"><b style="display:block">766,987</b><span style="display:block">habitantes</span></div>
       <div class="p1-stat"><b style="display:block">2026</b><span style="display:block">ciclo electoral</span></div>
     </div>
 
-    <div class="p1-card">
-      <h3>Empiece aqu&#237;: &#191;su condado est&#225; en el nuevo TX-15?</h3>
-      <p class="p1-card-sub">Toque su condado para una respuesta directa. Sin formulario, sin esperar.</p>
-      <div data-chips style="display:flex;flex-wrap:wrap;gap:8px"></div>
-      <div data-answer style="display:none"></div>
+    <p class="p1-lead">En un minuto, usted sabr&#225;:</p>
+
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Si sigue en el TX-15</b><span style="display:block">Su domicilio exacto comparado con el l&#237;mite de 2026 &mdash; no su condado, no su c&#243;digo postal.</span></span>
+      </div>
+    </div>
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Si su registro est&#225; en el archivo</b><span style="display:block">Verificado con el archivo de votantes del distrito en segundos. Si no podemos confirmarlo, una persona de nuestro equipo le da seguimiento.</span></span>
+      </div>
+    </div>
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Su condado, precinto y d&#243;nde votar</b><span style="display:block">Hasta el n&#250;mero de su precinto electoral &mdash; y si su condado le permite votar en cualquier casilla el d&#237;a de la elecci&#243;n.</span></span>
+      </div>
+    </div>
+    <div class="p1-benefit">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="p1-tick">&#10003;</span>
+        <span style="display:block"><b style="display:block">Cada funcionario que le responde</b><span style="display:block">Los cinco niveles &mdash; Congreso, estado, condado, ciudad y junta escolar &mdash; con periodos, tel&#233;fonos y qu&#233; hace cada cargo.</span></span>
+      </div>
     </div>
 
-    <div style="margin:0 0 22px">
-      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">1</span><b style="font-weight:600">Lo que usted ingresa</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Cinco campos: nombre, fecha de nacimiento y domicilio. Elija su domicilio de la lista de sugerencias; as&#237; su hogar queda en el mapa, no cerca de &#233;l. El tel&#233;fono y el correo son opcionales. Nos permiten darle seguimiento si su registro necesita una segunda revisi&#243;n.</span></details>
-      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">2</span><b style="font-weight:600">Lo que verificamos</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Su domicilio se compara con el l&#237;mite del TX-15 que la Legislatura adopt&#243; en 2025, y despu&#233;s con el archivo de votantes del distrito. Ambas verificaciones terminan en segundos.</span></details>
-      <details class="p1-step" name="p1-steps"><summary style="display:flex;gap:12px;align-items:center"><span style="flex:none;display:inline-block;width:30px;height:30px;border-radius:50%;background:#EDEFF5;text-align:center;line-height:30px;font-weight:700;font-size:14px">3</span><b style="font-weight:600">Lo que usted recibe</b><i class="p1-chev"></i></summary><span style="display:block;margin-top:8px;padding-left:42px">Una respuesta clara sobre el nuevo distrito, su condado y precinto electoral, y cada funcionario que representa su domicilio en cinco niveles: federal, estatal, condado, ciudad y junta escolar.</span></details>
+    <p class="p1-fine">Gratis &middot; Sin cuenta &middot; Ingl&#233;s o espa&#241;ol &middot; Un minuto</p>
+
+    <div class="p1-sample">
+      <div class="p1-sample-tag">Ejemplo de resultado</div>
+      <div class="p1-sample-head">
+        <span class="p1-sample-badge">DENTRO DEL TX-15</span>
+        <b style="display:block;margin-top:8px">Usted est&#225; registrado en el TX-15</b>
+      </div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Distrito Congresional</span><b>Distrito 15</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Condado</span><b>Hidalgo</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Precinto electoral</span><b>0107</b></div>
+      <div class="p1-row" style="display:flex;justify-content:space-between;gap:12px"><span>Sus funcionarios</span><b>26 verificados</b></div>
     </div>
+
     <div class="p1-map">
       <div class="p1-map-cap"><b style="display:block">El nuevo l&#237;mite del Distrito 15</b><span style="display:block">Todo lo sombreado en azul queda dentro de las l&#237;neas de 2026: 11 condados, desde Gonzales en el norte hasta Edinburg en la frontera. Pellizque para acercar, use dos dedos para mover el mapa.</span></div>
       <iframe class="p1-map-frame" title="Mapa interactivo del nuevo Distrito Congresional 15 de Texas" aria-label="Mapa interactivo que muestra el Distrito Congresional 15 de Texas para 2026" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -226,67 +283,6 @@
     // Where the legal sections live. Hardcoded to the current app so the
     // footer works before the Gist resolves; the Gist upgrades it below.
     var legalBase = 'https://lphg5860uf.c36.airoapp.ai';
-
-    // Enacted PLANC2333 figures, from the Texas Legislative Council's split
-    // counties report (same source officials-v3 scope.json cites). `pct` is
-    // the share of the county inside the NEW CD-15; `now` is the district the
-    // county sits in TODAY. Nothing here is rounded for effect - a split
-    // county is told it is split, because a county answer is not an address
-    // answer and this page must not imply otherwise.
-    var COUNTIES = [
-      { name: 'Aransas',      pct: 82.3, now: '27' },
-      { name: 'Bee',          pct: 100,  now: '27' },
-      { name: 'Brooks',       pct: 100,  now: '15' },
-      { name: 'DeWitt',       pct: 100,  now: '27' },
-      { name: 'Goliad',       pct: 100,  now: '27' },
-      { name: 'Gonzales',     pct: 100,  now: '27' },
-      { name: 'Hidalgo',      pct: 63.6, now: '28' },
-      { name: 'Jim Wells',    pct: 100,  now: '15' },
-      { name: 'Lavaca',       pct: 100,  now: '27' },
-      { name: 'Refugio',      pct: 89.8, now: '27' },
-      { name: 'San Patricio', pct: 63.6, now: '27' }
-    ];
-
-    function answerFor(county, which) {
-      var name = county.name;
-      if (county.pct === 100) {
-        if (county.now === '15') {
-          return which === 'es'
-            ? { cls: 'in', html: '<b>Condado de ' + name + '</b> queda completo dentro del nuevo TX-15 &mdash; y ya lo estaba. Su número de distrito no cambia. Verifique su domicilio para ver su precinto y sus funcionarios.' }
-            : { cls: 'in', html: '<b>' + name + ' County</b> is entirely inside the new TX-15 &mdash; and it already was. Your district number does not change. Check your address to see your precinct and your officials.' };
-        }
-        return which === 'es'
-          ? { cls: 'in', html: '<b>Condado de ' + name + '</b> queda completo dentro del nuevo TX-15. Pasa del Distrito ' + county.now + ' al 15, así que su representante federal cambia para 2026.' }
-          : { cls: 'in', html: '<b>' + name + ' County</b> is entirely inside the new TX-15. It moves from District ' + county.now + ', so your member of Congress changes for 2026.' };
-      }
-      var pct = String(county.pct);
-      return which === 'es'
-        ? { cls: 'split', html: '<b>Condado de ' + name + '</b> quedó <b>dividido</b>: cerca del ' + pct + '% está en el nuevo TX-15 y el resto en el Distrito ' + county.now + '. Vivir en ' + name + ' no basta para saberlo &mdash; solo su domicilio exacto lo decide.' }
-        : { cls: 'split', html: '<b>' + name + ' County</b> is <b>split</b>: about ' + pct + '% of it is in the new TX-15 and the rest is in District ' + county.now + '. Living in ' + name + ' is not enough to tell &mdash; only your exact address decides.' };
-    }
-
-    function buildChips(block, which) {
-      var wrap = block.querySelector('[data-chips]');
-      var out = block.querySelector('[data-answer]');
-      if (!wrap || !out) return;
-      wrap.innerHTML = '';
-      COUNTIES.forEach(function (county) {
-        var button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'p1-chip';
-        button.textContent = county.name;
-        button.addEventListener('click', function () {
-          var chips = wrap.querySelectorAll('.p1-chip');
-          for (var i = 0; i < chips.length; i++) { chips[i].className = 'p1-chip'; }
-          button.className = 'p1-chip on';
-          var answer = answerFor(county, which);
-          out.className = 'p1-answer ' + answer.cls;
-          out.innerHTML = answer.html;
-          out.style.display = 'block';
-        });
-        wrap.appendChild(button);
-      });
-    }
 
     // Footer legal strings, copied verbatim from the app's i18n.js
     // (footerTagline / footerTerms / ... / footerNotOfficial) so the two
@@ -335,20 +331,16 @@
       }
     }
 
-    var allBlocks = root.querySelectorAll('[data-lang-block]');
-    for (var b = 0; b < allBlocks.length; b++) {
-      buildChips(allBlocks[b], allBlocks[b].getAttribute('data-lang-block'));
-    }
-
     var langButtons = root.querySelectorAll('[data-setlang]');
     for (var k = 0; k < langButtons.length; k++) {
       (function (button) { button.addEventListener('click', function () { show(button.getAttribute('data-setlang')); }); })(langButtons[k]);
     }
     show(lang);
 
-    // The Gist only upgrades things still served BY THE APP - the CTA links
-    // and the logos. The map lives at a stable GitHub Pages URL and is
-    // deliberately left alone here; changing the app URL must not touch it.
+    // The Gist only upgrades things still served BY THE APP - the CTA links,
+    // the logos and the legal links. The map lives at a stable GitHub Pages
+    // URL and is deliberately left alone here; changing the app URL must not
+    // touch it.
     fetch(GIST, { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (cfg) {
       if (!cfg || !cfg.target) return;
       var base = String(cfg.target).replace(/\/$/, '');
@@ -357,11 +349,11 @@
         var block = ctas[i].closest ? ctas[i].closest('[data-lang-block]') : null;
         ctas[i].href = base + '/?lang=' + (block ? block.getAttribute('data-lang-block') : 'en');
       }
+      var logos = root.querySelectorAll('.p1-logo');
+      for (var m = 0; m < logos.length; m++) { logos[m].src = base + '/assets/brand/bp-logo-small.png'; }
       // Legal links follow the app wherever it moves, same as the CTA.
       legalBase = base;
       paintFooter(lang);
-      var logos = root.querySelectorAll('.p1-logo');
-      for (var m = 0; m < logos.length; m++) { logos[m].src = base + '/assets/brand/bp-logo-small.png'; }
     }).catch(function () {});
   })();
   </script>
