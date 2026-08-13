@@ -1,0 +1,205 @@
+<!-- =====================================================================
+  MyTX15 - Page 1 for pulidoevents.com/mytx15  (v7)
+  Paste into: GoDaddy Website Builder -> Welcome page -> Custom Code block.
+  REPLACE the whole block, never append.
+
+  v7 - the look-alike handoff (Marco's design, reaffirmed):
+  * This page is a visual twin of the app's intake form. The fields are
+    DUMMIES: readonly, no validation, no autocomplete, no submit logic.
+    Tapping any field hands off instantly to the app with that field's id
+    (?field=fullName etc.); the app - deployed with the matching restyle in
+    commit 88bf0ab - puts the cursor in that exact field on arrival. One
+    continuous form across two systems.
+  * The handoff fires on pointerdown (earlier than click or focus), the
+    inputs carry inputmode="none" so no keyboard flashes during navigation,
+    and APP is preconnected at load so the jump is warm.
+  * Why dummies instead of a working form here: a working copy means every
+    validation rule, autocomplete quirk and payload field exists twice and
+    drifts (the old duplicated form is where the name-splitting and CORS
+    lock-up bugs lived). One real form, one look.
+  * Design language matches the app: white page, Lora 700 (italic hero),
+    2px navy #00205B cards on 10px radii, D0D5E0 input borders, red
+    #AD0B32 accents. The app self-hosts Lora; this page loads it from
+    Google Fonts (no CSP here).
+  * Gist still retargets the app URL, logos and legal links at runtime.
+    GoDaddy strips display:* from <style> blocks, so every layout-critical
+    display rule is inline.
+====================================================================== -->
+<div id="mytx15" style="background:#fff;color:#00205B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.6;padding:0;width:100vw;margin-left:calc(50% - 50vw);-webkit-text-size-adjust:100%;box-sizing:border-box">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,700;1,700&display=swap');
+#mytx15 .m-header{align-items:center;justify-content:space-between;gap:12px;padding:18px;max-width:640px;margin:0 auto;border-bottom:1px solid #EDEFF5}
+#mytx15 .m-headline{font-family:Lora,Georgia,'Times New Roman',serif;font-size:clamp(32px,7vw,48px);font-weight:700;font-style:italic;line-height:1.15;text-align:center;margin:52px auto 28px;color:#00205B;letter-spacing:-.8px;max-width:90%;padding:0 16px}
+#mytx15 .m-sub{font-size:clamp(15px,2.5vw,18px);color:#555;text-align:center;max-width:70ch;margin:0 auto 60px;line-height:1.8;letter-spacing:.2px;padding:0 16px}
+#mytx15 .m-card{background:#fff;border:2px solid #00205B;border-radius:10px;box-shadow:0 2px 8px rgba(0,32,91,.06);padding:36px 28px 32px;max-width:580px;margin:0 auto 64px;box-sizing:border-box}
+#mytx15 .m-card-head{margin-bottom:28px;text-align:left}
+#mytx15 .m-card-head b{font-family:Lora,Georgia,serif;font-size:clamp(24px,3vw,30px);font-weight:700;color:#00205B;letter-spacing:-.4px;display:block;margin-bottom:4px}
+#mytx15 .m-card-head span{font-size:13px;color:#888;display:block}
+#mytx15 .m-field{margin-bottom:20px;box-sizing:border-box}
+#mytx15 .m-label{font-size:13px;font-weight:600;color:#00205B;margin-bottom:8px;display:block;letter-spacing:.3px}
+#mytx15 .m-label em{font-style:normal;font-weight:400;color:#999;margin-left:3px}
+#mytx15 .m-required{color:#AD0B32;margin-left:2px}
+#mytx15 .m-field input{width:100%;border:1.5px solid #D0D5E0;border-radius:6px;padding:13px 15px;font-size:16px;color:#00205B;background:#fff;font-family:inherit;box-sizing:border-box;-webkit-appearance:none;appearance:none;caret-color:transparent;cursor:pointer}
+#mytx15 .m-field input::placeholder{color:#AAB5C5}
+#mytx15 .m-dob{border:1.5px solid #D0D5E0;border-radius:6px;background:#fff;padding:0 12px;cursor:pointer}
+#mytx15 .m-dob input{border:0;outline:none;background:transparent;text-align:center;font-size:16px;color:#00205B;padding:13px 0;width:44px;font-family:inherit;-webkit-appearance:none;appearance:none;caret-color:transparent;cursor:pointer}
+#mytx15 .m-dob input.m-yr{width:64px}
+#mytx15 .m-dob input::placeholder{color:#AAB5C5}
+#mytx15 .m-slash{color:#D0D5E0;font-weight:600;font-size:16px;margin:0 4px}
+#mytx15 .m-cta{width:100%;min-height:52px;border:2px solid #00205B;border-radius:6px;background:#00205B;color:#fff;font-weight:700;font-size:16px;cursor:pointer;font-family:Lora,Georgia,serif;letter-spacing:.3px;margin-top:8px}
+#mytx15 .m-cta:active{opacity:.92;transform:translateY(1px)}
+#mytx15 .m-map{background:#fff;border:2px solid #00205B;border-radius:10px;overflow:hidden;margin:0 auto 64px;max-width:580px;box-shadow:0 2px 8px rgba(0,32,91,.06)}
+#mytx15 .m-map-tag{font-family:Lora,Georgia,serif;font-size:clamp(22px,3vw,28px);font-weight:700;color:#00205B;letter-spacing:-.3px;padding:24px 28px 0;margin:0;text-align:left}
+#mytx15 .m-map-cap{padding:12px 28px 20px;text-align:left;font-size:14px;color:#666;margin:0;line-height:1.6}
+#mytx15 .m-foot{border-top:1px solid #EDEFF5;margin-top:40px;padding:40px 20px 20px;text-align:center}
+#mytx15 .m-foot-name{font-family:Lora,Georgia,serif;font-size:20px;font-weight:800;color:#00205B;text-decoration:none;letter-spacing:-.3px}
+#mytx15 .m-paid{margin:16px auto 0;padding:12px 20px;max-width:420px;border:2px solid #00205B;border-radius:6px;color:#00205B;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;font-family:Lora,Georgia,serif}
+#mytx15 .m-legal a{padding:2px 4px;font-weight:500;color:#777;text-decoration:none;line-height:1.4}
+#mytx15 .m-legal a:hover{color:#00205B}
+#mytx15 .m-note{margin:0 auto;display:block;max-width:480px;padding-top:20px;border-top:1px solid #EDEFF5;font-size:12px;color:#777;line-height:1.8;text-align:center}
+#mytx15 .m-lang button{border:1.5px solid #D0D5E0;background:#fff;min-height:34px;padding:6px 11px;border-radius:5px;font-weight:600;font-size:11px;color:#777;cursor:pointer;font-family:inherit;letter-spacing:.5px}
+#mytx15 .m-lang button.on{background:#00205B;color:#fff;border-color:#00205B}
+@media(max-width:560px){
+#mytx15 .m-header{padding:16px}
+#mytx15 .m-card{padding:24px 18px;margin:0 14px 48px;border-radius:8px}
+#mytx15 .m-headline{font-size:28px;margin:36px 0 20px}
+#mytx15 .m-sub{font-size:15px;margin-bottom:40px}
+#mytx15 .m-card-head b{font-size:22px}
+#mytx15 .m-map{margin:0 14px 48px;border-radius:8px}
+#mytx15 .m-map-tag{font-size:20px;padding:18px 18px 0}
+#mytx15 .m-map-cap{padding:10px 18px 16px}
+#mytx15 .m-foot{padding:32px 16px 16px}
+}
+</style>
+
+<div class="m-header" style="display:flex">
+  <a data-cta href="https://lphg5860uf.c36.airoapp.ai/?lang=en" style="display:block;text-decoration:none" aria-label="MyTX15">
+    <img data-logo src="https://lphg5860uf.c36.airoapp.ai/assets/brand/bp-logo-small.png" alt="Bobby Pulido for Congress" style="height:32px;width:auto;display:block">
+  </a>
+  <div class="m-lang" style="display:flex;gap:6px">
+    <button type="button" class="on" data-setlang="en">EN</button>
+    <button type="button" data-setlang="es">ES</button>
+  </div>
+</div>
+
+<div style="max-width:640px;margin:0 auto">
+  <h1 class="m-headline" data-t="headline"></h1>
+  <p class="m-sub" data-t="sub"></p>
+
+  <!-- Look-alike of the app's intake card. Every input is a dummy: tapping it
+       jumps to the real form with the same field focused. -->
+  <div class="m-card">
+    <div class="m-card-head"><b data-t="formTitle"></b><span data-t="formSub"></span></div>
+
+    <div class="m-field">
+      <span class="m-label"><span data-t="nameLabel"></span><span class="m-required">*</span></span>
+      <input data-jump="fullName" type="text" inputmode="none" readonly placeholder="Jane G. Rodriguez" aria-label="Full name, opens the form">
+    </div>
+
+    <div class="m-field">
+      <span class="m-label" id="m-dob-label"><span data-t="dobLabel"></span><span class="m-required">*</span></span>
+      <div class="m-dob" data-jump="dobMonth" style="display:flex;align-items:center" role="group" aria-labelledby="m-dob-label">
+        <input data-jump="dobMonth" type="text" inputmode="none" readonly placeholder="MM" aria-label="Birth month, opens the form">
+        <span class="m-slash">/</span>
+        <input data-jump="dobDay" type="text" inputmode="none" readonly placeholder="DD" aria-label="Birth day, opens the form">
+        <span class="m-slash">/</span>
+        <input data-jump="dobYear" class="m-yr" type="text" inputmode="none" readonly placeholder="YYYY" aria-label="Birth year, opens the form">
+      </div>
+    </div>
+
+    <div class="m-field">
+      <span class="m-label"><span data-t="streetLabel"></span><span class="m-required">*</span></span>
+      <input data-jump="street" type="text" inputmode="none" readonly placeholder="123 Main St, City, Zip" aria-label="Address, opens the form">
+    </div>
+
+    <div class="m-field">
+      <span class="m-label"><span data-t="phoneLabel"></span><em>(<span data-t="optional"></span>)</em></span>
+      <input data-jump="phone" type="text" inputmode="none" readonly placeholder="956-555-0123" aria-label="Phone, opens the form">
+    </div>
+
+    <div class="m-field">
+      <span class="m-label"><span data-t="emailLabel"></span><em>(<span data-t="optional"></span>)</em></span>
+      <input data-jump="email" type="text" inputmode="none" readonly placeholder="jane@email.com" aria-label="Email, opens the form">
+    </div>
+
+    <button type="button" class="m-cta" data-jump="fullName" data-t="submit"></button>
+  </div>
+
+  <div class="m-map">
+    <p class="m-map-tag" data-t="mapTag"></p>
+    <p class="m-map-cap" data-t="mapCap"></p>
+    <iframe style="width:100%;height:500px;border:0;display:block" title="Interactive map of the new Texas Congressional District 15" aria-label="Interactive map showing the 2026 Texas Congressional District 15" src="https://infobp.github.io/MyTX15Map/" scrolling="no" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+</div>
+
+<div class="m-foot">
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+    <img data-logo src="https://lphg5860uf.c36.airoapp.ai/assets/brand/bp-logo-small.png" alt="Bobby Pulido for Congress" style="height:28px;width:auto;display:block">
+    <a class="m-foot-name" href="https://pulidoevents.com/mytx15">MyTX15</a>
+  </div>
+  <p class="m-paid" data-t="paid"></p>
+  <div class="m-legal" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 8px;margin:12px 0;font-size:10px">
+    <a data-legal="terms" href="#"></a><span style="color:#DDD">·</span>
+    <a data-legal="privacy" href="#"></a><span style="color:#DDD">·</span>
+    <a data-legal="disclaimer" href="#"></a><span style="color:#DDD">·</span>
+    <a data-legal="accessibility" href="#"></a><span style="color:#DDD">·</span>
+    <a data-legal="contact" href="#"></a>
+  </div>
+  <p class="m-note" data-t="note"></p>
+</div>
+
+<script>
+(function(){
+  var root=document.getElementById('mytx15');
+  if(!root)return;
+  var GIST='https://gist.githubusercontent.com/InfoBP/c974c9cb7da44a3cb18b8d821723e883/raw/redirect-config.json';
+  var APP='https://lphg5860uf.c36.airoapp.ai';
+
+  // Warm the jump: DNS + TLS to the app are done before anyone taps.
+  var pc=document.createElement('link');pc.rel='preconnect';pc.href=APP;pc.crossOrigin='';document.head.appendChild(pc);
+
+  var T={en:{headline:'Texas redrew its congressional map. Find out where your home landed.',sub:'The Legislature adopted new district lines in 2025. Hundreds of thousands of Texans changed congressional districts and most of them still don’t know it.',formTitle:'Check your registration',formSub:'Tap any field to begin. Free, no account, about a minute.',nameLabel:'Full name',dobLabel:'Date of birth',streetLabel:'Address',phoneLabel:'Phone',emailLabel:'Email',optional:'optional',submit:'Check my registration',mapTag:'See what changed',mapCap:'Four of these counties are now split down the middle. Knowing your county is not the same as knowing your district. MyTX15 knows the difference.',paid:'Paid by Bobby Pulido for Texas',terms:'Terms of Use',privacy:'Privacy & Data Use',disclaimer:'Disclaimer',accessibility:'Accessibility',contact:'Contact / Support',note:'MyTX15 is not an official government website. Results may be incomplete, delayed, or incorrect. Always verify with official sources.'},
+  es:{headline:'Texas redibujó su mapa congresional. Vea dónde quedó su hogar.',sub:'La Legislatura adoptó nuevos límites de distrito en 2025. Cientos de miles de personas cambiaron de distrito congresional y la mayoría aún no lo sabe.',formTitle:'Verifique su registro',formSub:'Toque cualquier campo para comenzar. Gratis, sin cuenta, en un minuto.',nameLabel:'Nombre completo',dobLabel:'Fecha de nacimiento',streetLabel:'Dirección',phoneLabel:'Teléfono',emailLabel:'Correo electrónico',optional:'opcional',submit:'Verificar mi registro',mapTag:'Vea qué cambió',mapCap:'Cuatro de estos condados ahora están divididos por la mitad. Saber su condado no es lo mismo que saber su distrito. MyTX15 sabe la diferencia.',paid:'Pagado por Bobby Pulido for Texas',terms:'Términos de uso',privacy:'Privacidad y uso de datos',disclaimer:'Aviso legal',accessibility:'Accesibilidad',contact:'Contacto / Soporte',note:'MyTX15 no es un sitio web oficial del gobierno. Los resultados pueden estar incompletos, retrasados o ser incorrectos. Siempre verifique con fuentes oficiales.'}};
+
+  var urlLang=(location.search.match(/[?&]lang=(en|es)/i)||[])[1];
+  var lang=urlLang?urlLang.toLowerCase():((navigator.language||'').toLowerCase().indexOf('es')===0?'es':'en');
+
+  function paint(){
+    var dict=T[lang]||T.en,slots=root.querySelectorAll('[data-t]');
+    for(var i=0;i<slots.length;i++){var k=slots[i].getAttribute('data-t');if(dict[k]!==undefined)slots[i].textContent=dict[k];}
+    var legal=root.querySelectorAll('[data-legal]');
+    for(var j=0;j<legal.length;j++){var ln=legal[j].getAttribute('data-legal');legal[j].textContent=dict[ln];legal[j].href=APP+'/?legal='+ln;}
+    var cta=root.querySelectorAll('[data-cta]');
+    for(var c=0;c<cta.length;c++)cta[c].href=APP+'/?lang='+lang;
+    var btns=root.querySelectorAll('[data-setlang]');
+    for(var b=0;b<btns.length;b++)btns[b].className=btns[b].getAttribute('data-setlang')===lang?'on':'';
+  }
+
+  var langBtns=root.querySelectorAll('[data-setlang]');
+  for(var q=0;q<langBtns.length;q++){(function(b){b.addEventListener('click',function(){lang=b.getAttribute('data-setlang');paint();});})(langBtns[q]);}
+
+  // THE HANDOFF. pointerdown fires before focus or click, readonly +
+  // inputmode="none" keep any keyboard from flashing, and the app puts the
+  // cursor into the same field on arrival (?field=, consumed by home.js).
+  function jump(field){
+    var url=APP+'/?field='+encodeURIComponent(field)+'&lang='+lang;
+    if(window.top!==window.self){try{window.top.location.href=url;return;}catch(e){}}
+    window.location.href=url;
+  }
+  var jumps=root.querySelectorAll('[data-jump]');
+  for(var z=0;z<jumps.length;z++){(function(el){
+    el.addEventListener('pointerdown',function(e){e.preventDefault();jump(el.getAttribute('data-jump'));});
+    el.addEventListener('click',function(e){e.preventDefault();jump(el.getAttribute('data-jump'));});
+  })(jumps[z]);}
+
+  paint();
+  fetch(GIST,{cache:'no-store'}).then(function(r){return r.json();}).then(function(c){
+    if(!c||!c.target)return;
+    APP=String(c.target).replace(/\/$/,'');
+    var logos=root.querySelectorAll('[data-logo]');
+    for(var i=0;i<logos.length;i++)logos[i].src=APP+'/assets/brand/bp-logo-small.png';
+    paint();
+  }).catch(function(){});
+})();
+</script>
+</div>
